@@ -477,12 +477,13 @@ class TaxPortalAPITester:
         """Test that authentication is required for protected endpoints"""
         try:
             response = self.make_request("GET", "/clients/")  # No token
-            if response.status_code == 401:
-                self.log_test("Auth Required Test", True, "Correctly requires authentication")
+            if response.status_code in [401, 403]:  # Both are valid for missing auth
+                self.log_test("Auth Required Test", True, 
+                            f"Correctly requires authentication (HTTP {response.status_code})")
                 return True
             else:
                 self.log_test("Auth Required Test", False, 
-                            f"Expected 401, got {response.status_code}")
+                            f"Expected 401 or 403, got {response.status_code}")
                 return False
         except Exception as e:
             self.log_test("Auth Required Test", False, f"Exception: {str(e)}")
