@@ -321,15 +321,18 @@ frontend:
 
   - task: "API Integration Layer"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/services/api.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "testing"
           comment: "Need to test API calls, token handling, error interceptors, and backend communication"
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL: Mixed content security error - Frontend served over HTTPS but making HTTP requests to backend. Console shows: 'Mixed Content: The page at 'https://acctax-portal.preview.emergentagent.com/dashboard' was loaded over HTTPS, but requested an insecure XMLHttpRequest endpoint 'http://8a9ae7e5-f120-41a0-98b4-326df1076ebd.preview.emergentagent.com/api/clients/'. Auth API calls work (registration/login) but dashboard data fetching fails."
 
 metadata:
   created_by: "testing_agent"
