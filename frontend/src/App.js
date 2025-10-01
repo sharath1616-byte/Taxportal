@@ -1,6 +1,9 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+// Context
+import { AuthProvider } from "./context/AuthContext";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -13,7 +16,16 @@ import FeaturesGrid from "./components/FeaturesGrid";
 import CTASection from "./components/CTASection";
 import Footer from "./components/Footer";
 
-const Home = () => {
+// Auth Components
+import LoginForm from "./components/auth/LoginForm";
+import RegisterForm from "./components/auth/RegisterForm";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import Dashboard from "./components/Dashboard";
+
+// Toast Provider
+import { Toaster } from "./components/ui/sonner";
+
+const LandingPage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -32,13 +44,30 @@ const Home = () => {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegisterForm />} />
+            
+            {/* Protected Routes */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Redirect unknown routes to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }
