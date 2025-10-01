@@ -26,9 +26,6 @@ import Dashboard from "./components/Dashboard";
 import Customers from "./components/pages/Customers";
 import Pricing from "./components/pages/Pricing";
 
-// Toast Provider
-import { Toaster } from "./components/ui/sonner";
-
 const LandingPage = () => {
   return (
     <div className="min-h-screen">
