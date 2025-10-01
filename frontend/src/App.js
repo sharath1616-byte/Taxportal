@@ -5,42 +5,17 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // Context
 import { AuthProvider } from "./context/AuthContext";
 
-// Components
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import IndustryShowcase from "./components/IndustryShowcase";
-import ClientPortalSection from "./components/ClientPortalSection";
-import AIBackofficeSection from "./components/AIBackofficeSection";
-import IntegrationsSection from "./components/IntegrationsSection";
-import FeaturesGrid from "./components/FeaturesGrid";
-import CTASection from "./components/CTASection";
-import Footer from "./components/Footer";
+// Simple Components
+import SimpleLanding from "./components/SimpleLanding";
+import SimpleDashboard from "./components/SimpleDashboard";
+import SimpleDocuments from "./components/SimpleDocuments";
+import SimpleMessages from "./components/SimpleMessages";
+import SimpleInvoices from "./components/SimpleInvoices";
 
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
 import RegisterForm from "./components/auth/RegisterForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import Dashboard from "./components/Dashboard";
-
-// Page Components
-import Customers from "./components/pages/Customers";
-import Pricing from "./components/pages/Pricing";
-
-const LandingPage = () => {
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <IndustryShowcase />
-      <ClientPortalSection />
-      <AIBackofficeSection />
-      <IntegrationsSection />
-      <FeaturesGrid />
-      <CTASection />
-      <Footer />
-    </div>
-  );
-};
 
 function App() {
   return (
