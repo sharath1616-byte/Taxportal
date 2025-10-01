@@ -66,10 +66,8 @@ const DocumentUpload = ({ clientId, onUploadSuccess }) => {
 
       await Promise.all(uploadPromises);
       
-      toast({
-        title: "Upload Successful",
-        description: `${selectedFiles.length} document(s) uploaded successfully`,
-      });
+      // Show success message
+      alert(`${selectedFiles.length} document(s) uploaded successfully!`);
 
       setSelectedFiles([]);
       setCategory('');
