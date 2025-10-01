@@ -170,8 +170,12 @@ class TaxPortalAPITester:
 
     def test_user_login(self):
         """Test user login"""
+        if "tax_professional" not in self.users:
+            self.log_test("User Login", False, "No tax professional user available for login test")
+            return False
+            
         login_data = {
-            "email": "taxpro@example.com",
+            "email": self.users["tax_professional"]["email"],
             "password": "SecurePass123!"
         }
         
