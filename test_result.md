@@ -320,9 +320,16 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Landing Page Components"
+    - "User Registration System"
+    - "User Login System"
+    - "Authentication Context"
+    - "Protected Routes"
+    - "Dashboard Interface"
+    - "API Integration Layer"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
