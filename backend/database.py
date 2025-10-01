@@ -95,7 +95,17 @@ class BaseRepository:
     
     async def find_by_id(self, doc_id: str) -> Optional[dict]:
         """Find document by ID"""
+        # Try to find by id field first, then by _id field
         doc = await self.collection.find_one({"id": doc_id})
+        if not doc:
+            # Try to find by _id if doc_id looks like an ObjectId
+            try:
+                from bson import ObjectId
+                if ObjectId.is_valid(doc_id):
+                    doc = await self.collection.find_one({"_id": ObjectId(doc_id)})
+            except:
+                pass
+        
         if doc:
             doc["id"] = str(doc.get("_id", doc.get("id")))
             if "_id" in doc:
