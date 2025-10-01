@@ -80,11 +80,8 @@ const DocumentUpload = ({ clientId, onUploadSuccess }) => {
       const errorMessage = error.response?.data?.detail || 'Failed to upload documents';
       setError(errorMessage);
       
-      toast({
-        title: "Upload Failed",
-        description: errorMessage,
-        variant: "destructive"
-      });
+      // Show error message
+      alert(`Upload failed: ${errorMessage}`);
     } finally {
       setIsUploading(false);
     }
