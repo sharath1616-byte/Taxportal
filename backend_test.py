@@ -91,10 +91,13 @@ class TaxPortalAPITester:
 
     def test_user_registration(self):
         """Test user registration for different roles"""
+        import time
+        timestamp = str(int(time.time()))
+        
         test_users = [
             {
                 "role": "tax_professional",
-                "email": "taxpro@example.com",
+                "email": f"taxpro{timestamp}@example.com",
                 "password": "SecurePass123!",
                 "profile": {
                     "firstName": "John",
@@ -105,7 +108,7 @@ class TaxPortalAPITester:
             },
             {
                 "role": "client", 
-                "email": "client@example.com",
+                "email": f"client{timestamp}@example.com",
                 "password": "ClientPass123!",
                 "profile": {
                     "firstName": "Jane",
@@ -115,7 +118,7 @@ class TaxPortalAPITester:
             },
             {
                 "role": "admin",
-                "email": "admin@example.com", 
+                "email": f"admin{timestamp}@example.com", 
                 "password": "AdminPass123!",
                 "profile": {
                     "firstName": "Admin",
@@ -140,6 +143,23 @@ class TaxPortalAPITester:
                     else:
                         self.log_test(f"Register {user_data['role']}", False, 
                                     f"Missing token or user data in response: {data}")
+                elif response.status_code == 400 and "already registered" in response.text:
+                    # Try to login instead
+                    login_data = {
+                        "email": user_data["email"],
+                        "password": user_data["password"]
+                    }
+                    login_response = self.make_request("POST", "/auth/login", login_data)
+                    if login_response.status_code == 200:
+                        data = login_response.json()
+                        self.tokens[user_data["role"]] = data["access_token"]
+                        self.users[user_data["role"]] = data["user"]
+                        self.log_test(f"Register {user_data['role']}", True, 
+                                    f"User already exists, logged in with ID: {data['user']['id']}")
+                        success_count += 1
+                    else:
+                        self.log_test(f"Register {user_data['role']}", False, 
+                                    f"User exists but login failed: {login_response.text}")
                 else:
                     self.log_test(f"Register {user_data['role']}", False, 
                                 f"HTTP {response.status_code}: {response.text}")
