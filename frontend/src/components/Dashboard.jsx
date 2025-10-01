@@ -247,42 +247,122 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Your latest updates and notifications</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {recentActivity.length > 0 ? (
-              <div className="space-y-4">
-                {recentActivity.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      {item.type === 'task' ? (
-                        <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                      ) : (
-                        <MessageSquare className="h-5 w-5 text-green-600" />
-                      )}
-                      <div>
-                        <p className="font-medium text-gray-900">{item.title}</p>
-                        <p className="text-sm text-gray-500">
-                          {new Date(item.date).toLocaleDateString()}
-                        </p>
+        {/* Main Dashboard Tabs */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
+            <TabsTrigger value="tasks">Tasks & Messages</TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+                <CardDescription>Your latest updates and notifications</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {recentActivity.length > 0 ? (
+                  <div className="space-y-4">
+                    {recentActivity.map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          {item.type === 'task' ? (
+                            <CheckCircle2 className="h-5 w-5 text-blue-600" />
+                          ) : (
+                            <MessageSquare className="h-5 w-5 text-green-600" />
+                          )}
+                          <div>
+                            <p className="font-medium text-gray-900">{item.title}</p>
+                            <p className="text-sm text-gray-500">
+                              {new Date(item.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        {getStatusBadge(item.type, item.status)}
                       </div>
-                    </div>
-                    {getStatusBadge(item.type, item.status)}
+                    ))}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <Clock className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-gray-500">No recent activity</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                ) : (
+                  <div className="text-center py-8">
+                    <Clock className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <p className="text-gray-500">No recent activity</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Documents Tab */}
+          <TabsContent value="documents" className="space-y-6">
+            <div className="flex justify-center">
+              <DocumentUpload 
+                clientId="demo-client-id" 
+                onUploadSuccess={() => {
+                  // Refresh data after upload
+                  fetchDashboardData();
+                }}
+              />
+            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Documents</CardTitle>
+                <CardDescription>Your recently uploaded tax documents</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                  <p className="text-gray-500 mb-4">No documents uploaded yet</p>
+                  <p className="text-sm text-gray-400">Upload your tax documents using the form above</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Tasks & Messages Tab */}
+          <TabsContent value="tasks" className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Pending Tasks</CardTitle>
+                    <Button size="sm" variant="outline">
+                      <Plus className="w-4 h-4 mr-1" />
+                      Add Task
+                    </Button>
+                  </div>
+                  <CardDescription>Tasks that need your attention</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8">
+                    <CheckCircle2 className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <p className="text-gray-500">No pending tasks</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Messages</CardTitle>
+                    <Button size="sm" variant="outline">
+                      <Plus className="w-4 h-4 mr-1" />
+                      New Message
+                    </Button>
+                  </div>
+                  <CardDescription>Recent communications</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8">
+                    <MessageSquare className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <p className="text-gray-500">No messages</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
