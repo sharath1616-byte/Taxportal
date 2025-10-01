@@ -126,10 +126,25 @@ class BaseRepository:
     async def update_by_id(self, doc_id: str, update_data: dict) -> Optional[dict]:
         """Update document by ID"""
         update_data["updatedAt"] = update_data.get("updatedAt")
+        
+        # Try to update by id field first
         result = await self.collection.update_one(
             {"id": doc_id}, 
             {"$set": update_data}
         )
+        
+        # If no document was updated, try by _id field
+        if result.modified_count == 0:
+            try:
+                from bson import ObjectId
+                if ObjectId.is_valid(doc_id):
+                    result = await self.collection.update_one(
+                        {"_id": ObjectId(doc_id)}, 
+                        {"$set": update_data}
+                    )
+            except:
+                pass
+                
         if result.modified_count:
             return await self.find_by_id(doc_id)
         return None
