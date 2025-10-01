@@ -13,7 +13,6 @@ const DocumentUpload = ({ clientId, onUploadSuccess }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
-  const { toast } = useToast();
 
   const documentCategories = [
     { value: 'w2', label: 'W-2 Forms' },
