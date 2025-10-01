@@ -4,6 +4,8 @@ import { clientAPI, taskAPI, messageAPI, invoiceAPI } from '../services/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import DocumentUpload from './DocumentUpload';
 import { 
   Users, 
   FileText, 
@@ -13,7 +15,9 @@ import {
   CheckCircle2,
   AlertCircle,
   Clock,
-  DollarSign
+  DollarSign,
+  Upload,
+  Plus
 } from 'lucide-react';
 
 const Dashboard = () => {
