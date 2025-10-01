@@ -335,3 +335,5 @@ test_plan:
 agent_communication:
     - agent: "testing"
       message: "Comprehensive backend API testing completed successfully. All 14 core test scenarios passed including authentication, CRUD operations, role-based access control, file uploads, and error handling. Fixed critical bcrypt password hashing issue and database ID handling problems. API is fully functional and ready for production use."
+    - agent: "testing"
+      message: "Starting comprehensive frontend testing for TaxPortal Pro. Will test landing page, authentication flows, dashboard functionality, and API integrations. Frontend URL: https://acctax-portal.preview.emergentagent.com"
