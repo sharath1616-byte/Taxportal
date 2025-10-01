@@ -135,12 +135,12 @@ const Navbar = () => {
             <button className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
               Book Demo
             </button>
-            <button className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
+            <a href="/login" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
               Log In
-            </button>
-            <button className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">
+            </a>
+            <a href="/register" className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">
               Start Trial
-            </button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
