@@ -22,6 +22,10 @@ import RegisterForm from "./components/auth/RegisterForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 
+// Page Components
+import Customers from "./components/pages/Customers";
+import Pricing from "./components/pages/Pricing";
+
 // Toast Provider
 import { Toaster } from "./components/ui/sonner";
 
