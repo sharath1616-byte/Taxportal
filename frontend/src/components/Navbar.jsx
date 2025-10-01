@@ -156,21 +156,21 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-200">
-            <div className="space-y-4">
-              <a href="#" className="block px-3 py-2 text-gray-700 font-medium">Products</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 font-medium">Solutions</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 font-medium">Resources</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 font-medium">Customers</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 font-medium">Pricing</a>
-              <div className="pt-4 border-t border-gray-200">
-                <button className="block w-full text-left px-3 py-2 text-gray-700 font-medium">
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+              <a href="#" className="block px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">Products</a>
+              <a href="#" className="block px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">Solutions</a>
+              <a href="#" className="block px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">Resources</a>
+              <a href="/customers" className="block px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">Customers</a>
+              <a href="/pricing" className="block px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">Pricing</a>
+              <div className="pt-4 border-t border-gray-200 mt-4">
+                <button className="block w-full text-left px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">
                   Book Demo
                 </button>
-                <a href="/login" className="block w-full text-left px-3 py-2 text-gray-700 font-medium">
+                <a href="/login" className="block w-full text-left px-3 py-2 text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-50 rounded-md">
                   Log In
                 </a>
-                <a href="/register" className="mt-2 w-full bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors inline-block text-center">
+                <a href="/register" className="mt-3 mx-3 w-auto bg-black text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors inline-block text-center">
                   Start Trial
                 </a>
               </div>
