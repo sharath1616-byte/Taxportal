@@ -167,12 +167,12 @@ const Navbar = () => {
                 <button className="block w-full text-left px-3 py-2 text-gray-700 font-medium">
                   Book Demo
                 </button>
-                <button className="block w-full text-left px-3 py-2 text-gray-700 font-medium">
+                <a href="/login" className="block w-full text-left px-3 py-2 text-gray-700 font-medium">
                   Log In
-                </button>
-                <button className="mt-2 w-full bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">
+                </a>
+                <a href="/register" className="mt-2 w-full bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors inline-block text-center">
                   Start Trial
-                </button>
+                </a>
               </div>
             </div>
           </div>
