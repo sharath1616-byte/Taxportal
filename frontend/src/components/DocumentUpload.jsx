@@ -6,7 +6,6 @@ import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Alert } from './ui/alert';
 import { Upload, FileText, X, CheckCircle2 } from 'lucide-react';
-import { useToast } from './ui/use-toast';
 
 const DocumentUpload = ({ clientId, onUploadSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
