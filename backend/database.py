@@ -151,7 +151,18 @@ class BaseRepository:
     
     async def delete_by_id(self, doc_id: str) -> bool:
         """Delete document by ID"""
+        # Try to delete by id field first
         result = await self.collection.delete_one({"id": doc_id})
+        
+        # If no document was deleted, try by _id field
+        if result.deleted_count == 0:
+            try:
+                from bson import ObjectId
+                if ObjectId.is_valid(doc_id):
+                    result = await self.collection.delete_one({"_id": ObjectId(doc_id)})
+            except:
+                pass
+                
         return result.deleted_count > 0
     
     async def count(self, filter_dict: dict = {}) -> int:
