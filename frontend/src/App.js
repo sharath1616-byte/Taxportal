@@ -27,6 +27,8 @@ import ClientServicesManagement from "./components/ClientServicesManagement";
 import ComplianceTracker from "./components/ComplianceTracker";
 import ClientComplianceCalendar from "./components/ClientComplianceCalendar";
 import BookkeepingManagement from "./components/BookkeepingManagement";
+import SecuritySettings from "./components/SecuritySettings";
+import WhiteLabelSettings from "./components/WhiteLabelSettings";
 
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
