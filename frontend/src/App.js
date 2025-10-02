@@ -26,6 +26,7 @@ import PlatformSubscription from "./components/PlatformSubscription";
 import ClientServicesManagement from "./components/ClientServicesManagement";
 import ComplianceTracker from "./components/ComplianceTracker";
 import ClientComplianceCalendar from "./components/ClientComplianceCalendar";
+import BookkeepingManagement from "./components/BookkeepingManagement";
 
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
