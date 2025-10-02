@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import SimpleNavbar from './SimpleNavbar';
-import { Check, Star, Crown, Zap } from 'lucide-react';
+import { paymentAPI } from '../services/api';
+import { 
+  Check, 
+  Star,
+  Zap,
+  Shield,
+  Users,
+  FileText,
+  MessageSquare,
+  CreditCard,
+  Building,
+  Crown,
+  Palette,
+  Globe,
+  Settings,
+  Briefcase,
+  Award,
+  Layers
+} from 'lucide-react';
 
 const PricingPage = () => {
   const plans = [
