@@ -131,15 +131,16 @@ const RegisterForm = () => {
                 id="role"
                 name="role"
                 required
-                value={formData.role}
+                value={formData.role || "tax_professional"}
                 onChange={handleChange}
                 disabled={isLoading}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="">Select account type</option>
-                <option value="client">Client</option>
                 <option value="tax_professional">Tax Professional</option>
               </select>
+              <p className="text-sm text-gray-500 mt-1">
+                Only tax professionals can register directly. Clients are invited by their tax professionals.
+              </p>
             </div>
             
             <div className="space-y-2">
