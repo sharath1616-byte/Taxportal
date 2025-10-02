@@ -429,8 +429,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Frontend Compilation Fix"
-    - "Email Integration Implementation" 
     - "Payment Gateway Integration"
     - "Enhanced Authentication (2FA + reCAPTCHA)"
     - "Bookkeeping Services Expansion"
