@@ -392,6 +392,177 @@ const EnhancedInvoices = () => {
     );
   }
 
+  // Client-specific view for viewing and paying invoices
+  if (user?.role === 'client') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <SimpleNavbar />
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">My Invoices</h1>
+              <p className="text-gray-600 mt-2">View and pay your invoices from your tax professional</p>
+            </div>
+          </div>
+
+          {/* Search and Filters for clients */}
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search invoices by number..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <Select value={filterStatus} onValueChange={setFilterStatus}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    <SelectItem value="sent">Unpaid</SelectItem>
+                    <SelectItem value="paid">Paid</SelectItem>
+                    <SelectItem value="overdue">Overdue</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Client Invoice List */}
+          <div className="space-y-4">
+            {filteredInvoices.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-12">
+                  <Receipt className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No invoices found</h3>
+                  <p className="text-gray-600 mb-6">
+                    {searchTerm || filterStatus !== 'all' 
+                      ? 'No invoices match your current filters.'
+                      : 'You have no invoices yet.'
+                    }
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              filteredInvoices.map((invoice) => (
+                <Card key={invoice.id}>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Receipt className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">{invoice.invoiceNumber}</h3>
+                          <p className="text-sm text-gray-600">
+                            From your tax professional
+                          </p>
+                          <div className="flex items-center space-x-4 mt-1">
+                            <span className="text-sm text-gray-500">
+                              <Calendar className="w-4 h-4 inline mr-1" />
+                              Due: {invoice.dueDate}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              <DollarSign className="w-4 h-4 inline mr-1" />
+                              ${invoice.total.toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <Badge className={getStatusColor(invoice.status)}>
+                          {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                        </Badge>
+
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm">
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          
+                          {(invoice.status === 'sent' || invoice.status === 'overdue') && (
+                            <Button 
+                              size="sm"
+                              onClick={() => handlePayInvoice(invoice)}
+                              className="bg-green-600 hover:bg-green-700"
+                            >
+                              <CreditCard className="w-4 h-4 mr-2" />
+                              Pay Now
+                            </Button>
+                          )}
+                          
+                          <Button variant="outline" size="sm">
+                            <Download className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+
+          {/* Payment Methods Info for Clients */}
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Secure Payment Processing</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-6 text-center">
+                <div>
+                  <div className="bg-blue-100 p-3 rounded-full w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Stripe Integration</h3>
+                  <p className="text-sm text-gray-600">
+                    Secure payment processing with industry-leading encryption
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="bg-green-100 p-3 rounded-full w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-green-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Multiple Payment Methods</h3>
+                  <p className="text-sm text-gray-600">
+                    Accept all major credit cards and digital payment methods
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="bg-purple-100 p-3 rounded-full w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                    <Receipt className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Instant Processing</h3>
+                  <p className="text-sm text-gray-600">
+                    Real-time payment processing with immediate confirmation
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>Security Note:</strong> All payments are processed securely through Stripe. 
+                  Your payment information is never stored on our servers and is protected with 
+                  bank-level encryption.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <SimpleNavbar />
