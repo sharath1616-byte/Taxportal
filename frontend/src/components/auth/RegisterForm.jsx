@@ -4,7 +4,6 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Label } from '../ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Alert } from '../ui/alert';
 import { Loader2, UserPlus } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
