@@ -53,6 +53,16 @@ const SimpleNavbar = () => {
                   Dashboard
                 </Button>
               </Link>
+              {user?.role === 'tax_professional' && (
+                <Link to="/clients">
+                  <Button 
+                    variant={isActive('/clients') ? 'default' : 'ghost'}
+                    size="sm"
+                  >
+                    Clients
+                  </Button>
+                </Link>
+              )}
               <Link to="/documents">
                 <Button 
                   variant={isActive('/documents') ? 'default' : 'ghost'}
@@ -87,6 +97,14 @@ const SimpleNavbar = () => {
               </Link>
               {user?.role === 'tax_professional' && (
                 <>
+                  <Link to="/employees">
+                    <Button 
+                      variant={isActive('/employees') ? 'default' : 'ghost'}
+                      size="sm"
+                    >
+                      Team
+                    </Button>
+                  </Link>
                   <Link to="/invite-clients">
                     <Button 
                       variant={isActive('/invite-clients') ? 'default' : 'ghost'}
