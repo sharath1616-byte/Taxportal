@@ -95,6 +95,16 @@ const SimpleNavbar = () => {
                   Payments
                 </Button>
               </Link>
+              {user?.role === 'client' && (
+                <Link to="/compliance-calendar">
+                  <Button 
+                    variant={isActive('/compliance-calendar') ? 'default' : 'ghost'}
+                    size="sm"
+                  >
+                    Compliance
+                  </Button>
+                </Link>
+              )}
               {user?.role === 'tax_professional' && (
                 <>
                   <Link to="/employees">
