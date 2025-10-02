@@ -276,7 +276,12 @@ const InviteClients = () => {
               </CardHeader>
               
               <CardContent>
-                {invitations.length === 0 ? (
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <Loader className="w-8 h-8 text-blue-500 mx-auto mb-4 animate-spin" />
+                    <p className="text-gray-600">Loading invitations...</p>
+                  </div>
+                ) : invitations.length === 0 ? (
                   <div className="text-center py-12">
                     <Mail className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600 mb-4">No invitations sent yet</p>
