@@ -87,7 +87,9 @@ class BaseRepository:
             result = await self.collection.insert_one(data)
             created_doc = await self.collection.find_one({"_id": result.inserted_id})
             if created_doc:
-                created_doc["id"] = str(created_doc["_id"])
+                # Only set id from _id if id field doesn't exist
+                if "id" not in created_doc:
+                    created_doc["id"] = str(created_doc["_id"])
                 del created_doc["_id"]
             return created_doc
         except DuplicateKeyError:
