@@ -1697,6 +1697,23 @@ class TaxPortalAPITester:
             self.test_invalid_service_package,
             self.test_payment_status_access_control,
             self.test_stripe_webhook_endpoint,
+            # Bookkeeping Management Tests
+            self.test_create_bookkeeping_service,
+            self.test_get_bookkeeping_services,
+            self.test_get_specific_bookkeeping_service,
+            self.test_create_bookkeeping_task,
+            self.test_get_bookkeeping_tasks,
+            self.test_create_time_entry,
+            self.test_get_time_entries,
+            self.test_bookkeeping_dashboard,
+            self.test_bookkeeping_role_based_access,
+            # Security (2FA + reCAPTCHA) Tests
+            self.test_2fa_setup,
+            self.test_2fa_verify_and_enable,
+            self.test_2fa_status_check,
+            self.test_2fa_disable,
+            self.test_recaptcha_verify_endpoint,
+            self.test_security_authentication_required,
             self.test_logout
         ]
         
