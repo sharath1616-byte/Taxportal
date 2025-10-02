@@ -46,19 +46,7 @@ async def create_invoice_payment_checkout(
     try:
         # Get invoice from database
         db = await get_database()
-        print(f"Looking for invoice with ID: {request_data.invoice_id}")
         invoice = await db.invoices.find_one({"id": request_data.invoice_id})
-        print(f"Found invoice: {invoice}")
-        
-        if not invoice:
-            # Try to find by _id as well
-            try:
-                from bson import ObjectId
-                if ObjectId.is_valid(request_data.invoice_id):
-                    invoice = await db.invoices.find_one({"_id": ObjectId(request_data.invoice_id)})
-                    print(f"Found invoice by _id: {invoice}")
-            except:
-                pass
         
         if not invoice:
             raise HTTPException(status_code=404, detail="Invoice not found")
