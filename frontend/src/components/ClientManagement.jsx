@@ -979,6 +979,196 @@ const ClientManagement = () => {
                 </Card>
               </div>
             )}
+
+            {/* Edit Client Modal */}
+            {showEditClient && editingClient && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
+                <Card className="w-full max-w-4xl m-4 max-h-[90vh] overflow-y-auto">
+                  <CardHeader>
+                    <CardTitle>Edit Client</CardTitle>
+                    <CardDescription>Update client information and settings</CardDescription>
+                  </CardHeader>
+                  <form onSubmit={handleUpdateClient}>
+                    <CardContent className="space-y-6">
+                      {/* Basic Information */}
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <Input
+                            placeholder="First Name"
+                            value={newClientForm.firstName}
+                            onChange={(e) => setNewClientForm({...newClientForm, firstName: e.target.value})}
+                            required
+                          />
+                          <Input
+                            placeholder="Last Name"
+                            value={newClientForm.lastName}
+                            onChange={(e) => setNewClientForm({...newClientForm, lastName: e.target.value})}
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <Input
+                            type="email"
+                            placeholder="Email Address"
+                            value={newClientForm.email}
+                            onChange={(e) => setNewClientForm({...newClientForm, email: e.target.value})}
+                            required
+                          />
+                          <Input
+                            placeholder="Phone Number"
+                            value={newClientForm.phone}
+                            onChange={(e) => setNewClientForm({...newClientForm, phone: e.target.value})}
+                          />
+                        </div>
+                        <Input
+                          placeholder="Company Name (if applicable)"
+                          value={newClientForm.company}
+                          onChange={(e) => setNewClientForm({...newClientForm, company: e.target.value})}
+                          className="mt-4"
+                        />
+                        <Textarea
+                          placeholder="Business Address"
+                          value={newClientForm.address}
+                          onChange={(e) => setNewClientForm({...newClientForm, address: e.target.value})}
+                          className="mt-4"
+                        />
+                      </div>
+
+                      {/* Business Classification */}
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Business Classification</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Entity Type</label>
+                            <select
+                              value={newClientForm.entityType}
+                              onChange={(e) => setNewClientForm({...newClientForm, entityType: e.target.value})}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            >
+                              <option value="individual">Individual</option>
+                              <option value="sole_proprietorship">Sole Proprietorship</option>
+                              <option value="partnership">Partnership</option>
+                              <option value="llc">LLC</option>
+                              <option value="s_corp">S-Corporation</option>
+                              <option value="c_corp">C-Corporation</option>
+                              <option value="nonprofit">Non-Profit</option>
+                            </select>
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Primary Tax Form</label>
+                            <select
+                              value={newClientForm.taxFormType}
+                              onChange={(e) => setNewClientForm({...newClientForm, taxFormType: e.target.value})}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            >
+                              <option value="1040">Form 1040 (Individual)</option>
+                              <option value="1120">Form 1120 (C-Corporation)</option>
+                              <option value="1120S">Form 1120S (S-Corporation)</option>
+                              <option value="1065">Form 1065 (Partnership)</option>
+                              <option value="1041">Form 1041 (Estate/Trust)</option>
+                              <option value="990">Form 990 (Non-Profit)</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Compliance Requirements */}
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Compliance Requirements</h3>
+                        <div className="space-y-3">
+                          <label className="flex items-center space-x-3">
+                            <input
+                              type="checkbox"
+                              checked={newClientForm.salesTaxCompliance}
+                              onChange={(e) => setNewClientForm({...newClientForm, salesTaxCompliance: e.target.checked})}
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm">Sales Tax Compliance Required</span>
+                          </label>
+                          
+                          <label className="flex items-center space-x-3">
+                            <input
+                              type="checkbox"
+                              checked={newClientForm.payrollCompliance}
+                              onChange={(e) => setNewClientForm({...newClientForm, payrollCompliance: e.target.checked})}
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm">Payroll Tax Compliance Required</span>
+                          </label>
+                          
+                          <label className="flex items-center space-x-3">
+                            <input
+                              type="checkbox"
+                              checked={newClientForm.quarterlyFilings}
+                              onChange={(e) => setNewClientForm({...newClientForm, quarterlyFilings: e.target.checked})}
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm">Quarterly Tax Filings Required</span>
+                          </label>
+                          
+                          <label className="flex items-center space-x-3">
+                            <input
+                              type="checkbox"
+                              checked={newClientForm.annualFilings}
+                              onChange={(e) => setNewClientForm({...newClientForm, annualFilings: e.target.checked})}
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm">Annual Tax Return Filing</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Business Identifiers */}
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Business Identifiers</h3>
+                        <div className="grid grid-cols-1 gap-4">
+                          <Input
+                            placeholder="Federal EIN (if applicable)"
+                            value={newClientForm.federalEIN}
+                            onChange={(e) => setNewClientForm({...newClientForm, federalEIN: e.target.value})}
+                          />
+                          <Input
+                            placeholder="State ID / Business License Number"
+                            value={newClientForm.stateID}
+                            onChange={(e) => setNewClientForm({...newClientForm, stateID: e.target.value})}
+                          />
+                          <Input
+                            placeholder="Business License Type (if applicable)"
+                            value={newClientForm.businessLicense}
+                            onChange={(e) => setNewClientForm({...newClientForm, businessLicense: e.target.value})}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Additional Notes */}
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Compliance Notes</h3>
+                        <Textarea
+                          placeholder="Special compliance requirements, due dates, or other important notes..."
+                          value={newClientForm.complianceNotes}
+                          onChange={(e) => setNewClientForm({...newClientForm, complianceNotes: e.target.value})}
+                          rows={3}
+                        />
+                      </div>
+                    </CardContent>
+                    <div className="flex justify-end space-x-2 p-6 pt-0">
+                      <Button type="button" variant="outline" onClick={() => {
+                        setShowEditClient(false);
+                        setEditingClient(null);
+                        resetClientForm();
+                      }}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">
+                        Update Client
+                      </Button>
+                    </div>
+                  </form>
+                </Card>
+              </div>
+            )}
           </>
         ) : (
           // Client Detail View
