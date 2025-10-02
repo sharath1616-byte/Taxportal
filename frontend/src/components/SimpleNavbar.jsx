@@ -77,6 +77,26 @@ const SimpleNavbar = () => {
                   Invoices
                 </Button>
               </Link>
+              {user?.role === 'tax_professional' && (
+                <>
+                  <Link to="/invite-clients">
+                    <Button 
+                      variant={isActive('/invite-clients') ? 'default' : 'ghost'}
+                      size="sm"
+                    >
+                      Invite Clients
+                    </Button>
+                  </Link>
+                  <Link to="/email-integration">
+                    <Button 
+                      variant={isActive('/email-integration') ? 'default' : 'ghost'}
+                      size="sm"
+                    >
+                      Email Sync
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
           
