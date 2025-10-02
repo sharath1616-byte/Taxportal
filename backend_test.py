@@ -899,34 +899,43 @@ class TaxPortalAPITester:
             self.log_test("Create Invoice Payment Checkout", False, "No tax professional token available")
             return False
             
-        # First create an invoice to pay for
-        invoice_data = {
-            "clientId": self.clients.get("main", {}).get("id") if "main" in self.clients else str(uuid.uuid4()),
-            "items": [
-                {
-                    "description": "Tax Return Preparation",
-                    "quantity": 1,
-                    "rate": 300.00,
-                    "amount": 300.00
-                }
-            ],
-            "dueDate": (datetime.now() + timedelta(days=30)).isoformat(),
-            "taxAmount": 24.00,
-            "notes": "Payment for tax services"
-        }
+        # Use existing invoice from previous test if available
+        if hasattr(self, 'test_invoice_id'):
+            invoice_id = self.test_invoice_id
+        else:
+            # Create a new invoice for testing
+            invoice_data = {
+                "clientId": self.clients.get("main", {}).get("id") if "main" in self.clients else str(uuid.uuid4()),
+                "items": [
+                    {
+                        "description": "Tax Return Preparation",
+                        "quantity": 1,
+                        "rate": 300.00,
+                        "amount": 300.00
+                    }
+                ],
+                "dueDate": (datetime.now() + timedelta(days=30)).isoformat(),
+                "taxAmount": 24.00,
+                "notes": "Payment for tax services"
+            }
+            
+            try:
+                # Create invoice first
+                invoice_response = self.make_request("POST", "/invoices/", invoice_data,
+                                                   token=self.tokens["tax_professional"])
+                if invoice_response.status_code != 200:
+                    self.log_test("Create Invoice Payment Checkout", False, 
+                                f"Failed to create test invoice: {invoice_response.text}")
+                    return False
+                    
+                invoice = invoice_response.json()
+                invoice_id = invoice["id"]
+                self.test_invoice_id = invoice_id
+            except Exception as e:
+                self.log_test("Create Invoice Payment Checkout", False, f"Exception creating invoice: {str(e)}")
+                return False
         
         try:
-            # Create invoice first
-            invoice_response = self.make_request("POST", "/invoices/", invoice_data,
-                                               token=self.tokens["tax_professional"])
-            if invoice_response.status_code != 200:
-                self.log_test("Create Invoice Payment Checkout", False, 
-                            f"Failed to create test invoice: {invoice_response.text}")
-                return False
-                
-            invoice = invoice_response.json()
-            invoice_id = invoice["id"]
-            
             # Now create payment checkout
             payment_data = {
                 "invoice_id": invoice_id,
