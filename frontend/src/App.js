@@ -133,6 +133,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/compliance" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <ComplianceTracker />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Redirect unknown routes to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
