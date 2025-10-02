@@ -22,6 +22,8 @@ import ClientManagement from "./components/ClientManagement";
 import EmployeeManagement from "./components/EmployeeManagement";
 import EnhancedPricingPage from "./components/EnhancedPricingPage";
 import EnhancedInvoices from "./components/EnhancedInvoices";
+import PlatformSubscription from "./components/PlatformSubscription";
+import ClientServicesManagement from "./components/ClientServicesManagement";
 
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
