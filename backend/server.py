@@ -10,7 +10,7 @@ from pathlib import Path
 from database import connect_to_mongo, close_mongo_connection
 
 # Import route modules
-from routes import auth, clients, documents, tasks, messages, invoices, emails, payments, bookkeeping
+from routes import auth, clients, documents, tasks, messages, invoices, emails, payments, bookkeeping, security
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
