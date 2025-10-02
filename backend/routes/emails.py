@@ -161,7 +161,7 @@ async def get_sent_invitations(
     try:
         db = await get_database()
         invitations = await db.client_invitations.find(
-            {"professional_id": current_user["id"]}
+            {"professional_id": current_user["user_id"]}
         ).to_list(length=None)
         
         return {
