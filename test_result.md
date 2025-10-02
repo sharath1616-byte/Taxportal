@@ -312,6 +312,54 @@ backend:
           agent: "main"
           comment: "Need to implement customizable branding and multi-tenant architecture for white-label version."
 
+  - task: "Client Invoice Payment Issue Fix"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/EnhancedInvoices.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "Client login invoices payment not working - clients cannot make payments on their invoices"
+
+  - task: "Payment Section UI Cleanup"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/PaymentIntegration.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "Payments section showing tax professional services when it shouldn't - needs removal"
+
+  - task: "Client Management UI Scrolling Fix"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/ClientManagement.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "Tax professional login client section UI not scrolling down properly"
+
+  - task: "Edit Client Functionality Fix"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/ClientManagement.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "Edit client button not working on Tax Professional login"
+
 frontend:
   - task: "Landing Page Components"
     implemented: true
