@@ -36,7 +36,7 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<SimpleLanding />} />
-            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/pricing" element={<EnhancedPricingPage />} />
             <Route path="/about" element={<AboutUsPage />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegisterForm />} />
