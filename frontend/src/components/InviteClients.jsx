@@ -151,6 +151,20 @@ const InviteClients = () => {
               </CardHeader>
               
               <CardContent>
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-center">
+                    <AlertCircle className="w-5 h-5 text-red-500 mr-2" />
+                    <span className="text-red-700 text-sm">{error}</span>
+                  </div>
+                )}
+                
+                {successMessage && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4 flex items-center">
+                    <Check className="w-5 h-5 text-green-500 mr-2" />
+                    <span className="text-green-700 text-sm">{successMessage}</span>
+                  </div>
+                )}
+
                 <form onSubmit={handleInviteSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
