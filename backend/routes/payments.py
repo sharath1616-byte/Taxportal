@@ -53,10 +53,15 @@ async def create_invoice_payment_checkout(
         
         # Verify user has access to this invoice
         if current_user["role"] == "client":
-            if invoice.get("client_id") != current_user["user_id"]:
+            # For clients, check if they are the client on the invoice
+            # We need to get the client relationship to verify
+            client_relationship = await db.clients.find_one({"id": invoice.get("clientId")})
+            if not client_relationship or client_relationship.get("userId") != current_user["user_id"]:
                 raise HTTPException(status_code=403, detail="Access denied to this invoice")
         elif current_user["role"] == "tax_professional":
-            if invoice.get("professional_id") != current_user["user_id"]:
+            # For tax professionals, check if they are the professional for this client
+            client_relationship = await db.clients.find_one({"id": invoice.get("clientId")})
+            if not client_relationship or client_relationship.get("taxProfessionalId") != current_user["user_id"]:
                 raise HTTPException(status_code=403, detail="Access denied to this invoice")
         
         # Check if invoice is already paid
