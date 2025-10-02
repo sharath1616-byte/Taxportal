@@ -501,10 +501,12 @@ metadata:
 
 test_plan:
   current_focus:
+    - "User Registration System" 
     - "Payment Gateway Integration"
     - "Enhanced Authentication (2FA + reCAPTCHA)"
     - "Bookkeeping Services Expansion"
-  stuck_tasks: []
+  stuck_tasks:
+    - "User Registration System"
   test_all: false
   test_priority: "high_first"
 
