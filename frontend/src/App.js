@@ -161,6 +161,22 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/security" 
+              element={
+                <ProtectedRoute>
+                  <SecuritySettings />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/white-label" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <WhiteLabelSettings />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Redirect unknown routes to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
