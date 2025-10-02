@@ -42,7 +42,7 @@ class EmailResponse(BaseModel):
 async def send_client_invitation(
     request: ClientInvitationRequest,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(require_roles(["tax_professional", "admin"]))
+    current_user: dict = Depends(require_role("tax_professional", "admin"))
 ):
     """
     Send invitation email to a client
@@ -98,7 +98,7 @@ async def send_client_invitation(
 async def send_test_email(
     request: EmailTestRequest,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(require_roles(["tax_professional", "admin"]))
+    current_user: dict = Depends(require_role("tax_professional", "admin"))
 ):
     """
     Send a test email (for testing email integration)
@@ -153,7 +153,7 @@ async def send_notification_email(
 
 @router.get("/invitations")
 async def get_sent_invitations(
-    current_user: dict = Depends(require_roles(["tax_professional", "admin"]))
+    current_user: dict = Depends(require_role("tax_professional", "admin"))
 ):
     """
     Get all invitations sent by the current professional
@@ -176,7 +176,7 @@ async def get_sent_invitations(
 async def resend_invitation(
     invitation_id: str,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(require_roles(["tax_professional", "admin"]))
+    current_user: dict = Depends(require_role("tax_professional", "admin"))
 ):
     """
     Resend an existing invitation
