@@ -39,6 +39,7 @@ api_router.include_router(messages.router)
 api_router.include_router(invoices.router)
 api_router.include_router(emails.router)
 api_router.include_router(payments.router)
+api_router.include_router(bookkeeping.router)
 
 # Include the router in the main app
 app.include_router(api_router)
