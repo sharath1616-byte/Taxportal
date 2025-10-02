@@ -528,6 +528,241 @@ class TaxPortalAPITester:
             self.log_test("Logout Test", False, f"Exception: {str(e)}")
             return False
 
+    # EMAIL INTEGRATION TESTS
+    def test_send_client_invitation_email(self):
+        """Test sending client invitation email"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Send Client Invitation Email", False, "No tax professional token available")
+            return False
+            
+        invitation_data = {
+            "client_email": "newclient@example.com",
+            "client_first_name": "Sarah",
+            "client_last_name": "Johnson",
+            "personal_message": "Welcome to our tax services! I look forward to working with you.",
+            "provider": "sendgrid"
+        }
+        
+        try:
+            response = self.make_request("POST", "/emails/send-client-invitation", invitation_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success") and "queued for delivery" in data.get("message", ""):
+                    self.log_test("Send Client Invitation Email", True, 
+                                f"Invitation email queued successfully: {data['message']}")
+                    return True
+                else:
+                    self.log_test("Send Client Invitation Email", False, f"Unexpected response: {data}")
+                    return False
+            else:
+                self.log_test("Send Client Invitation Email", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Send Client Invitation Email", False, f"Exception: {str(e)}")
+            return False
+
+    def test_send_test_email(self):
+        """Test sending test email"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Send Test Email", False, "No tax professional token available")
+            return False
+            
+        test_email_data = {
+            "to_email": "test@example.com",
+            "subject": "TaxPortal Pro Email Integration Test",
+            "content": "<h1>Test Email</h1><p>This is a test email from TaxPortal Pro API.</p>",
+            "content_type": "html",
+            "provider": "sendgrid"
+        }
+        
+        try:
+            response = self.make_request("POST", "/emails/send-test-email", test_email_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success") and "queued for delivery" in data.get("message", ""):
+                    self.log_test("Send Test Email", True, 
+                                f"Test email queued successfully: {data['message']}")
+                    return True
+                else:
+                    self.log_test("Send Test Email", False, f"Unexpected response: {data}")
+                    return False
+            else:
+                self.log_test("Send Test Email", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Send Test Email", False, f"Exception: {str(e)}")
+            return False
+
+    def test_send_notification_email(self):
+        """Test sending notification email"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Send Notification Email", False, "No tax professional token available")
+            return False
+            
+        notification_data = {
+            "to_email": "client@example.com",
+            "notification_type": "document_uploaded",
+            "data": {
+                "message": "A new document has been uploaded to your tax portal.",
+                "portal_link": "https://taxportal.com/dashboard"
+            },
+            "provider": "sendgrid"
+        }
+        
+        try:
+            response = self.make_request("POST", "/emails/send-notification", notification_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success") and "queued for delivery" in data.get("message", ""):
+                    self.log_test("Send Notification Email", True, 
+                                f"Notification email queued successfully: {data['message']}")
+                    return True
+                else:
+                    self.log_test("Send Notification Email", False, f"Unexpected response: {data}")
+                    return False
+            else:
+                self.log_test("Send Notification Email", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Send Notification Email", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_sent_invitations(self):
+        """Test retrieving sent invitations"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get Sent Invitations", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/emails/invitations", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "invitations" in data and "total" in data:
+                    self.log_test("Get Sent Invitations", True, 
+                                f"Retrieved {data['total']} invitations successfully")
+                    return True
+                else:
+                    self.log_test("Get Sent Invitations", False, f"Unexpected response format: {data}")
+                    return False
+            else:
+                self.log_test("Get Sent Invitations", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Sent Invitations", False, f"Exception: {str(e)}")
+            return False
+
+    def test_email_authentication_required(self):
+        """Test that email endpoints require authentication"""
+        test_cases = [
+            ("/emails/send-client-invitation", "POST"),
+            ("/emails/send-test-email", "POST"),
+            ("/emails/send-notification", "POST"),
+            ("/emails/invitations", "GET")
+        ]
+        
+        success_count = 0
+        for endpoint, method in test_cases:
+            try:
+                response = self.make_request(method, endpoint, {})  # No token
+                if response.status_code in [401, 403]:
+                    self.log_test(f"Email Auth Required - {endpoint}", True, 
+                                f"Correctly requires authentication (HTTP {response.status_code})")
+                    success_count += 1
+                else:
+                    self.log_test(f"Email Auth Required - {endpoint}", False, 
+                                f"Expected 401/403, got {response.status_code}")
+            except Exception as e:
+                self.log_test(f"Email Auth Required - {endpoint}", False, f"Exception: {str(e)}")
+                
+        return success_count == len(test_cases)
+
+    def test_email_role_based_access(self):
+        """Test role-based access control for email endpoints"""
+        if "client" not in self.tokens:
+            self.log_test("Email RBAC Test", False, "No client token available")
+            return False
+            
+        # Test: Client trying to send invitation (should fail - requires tax_professional/admin)
+        invitation_data = {
+            "client_email": "test@example.com",
+            "client_first_name": "Test",
+            "client_last_name": "User",
+            "personal_message": "Test message"
+        }
+        
+        try:
+            response = self.make_request("POST", "/emails/send-client-invitation", invitation_data,
+                                       token=self.tokens["client"])
+            if response.status_code == 403:
+                self.log_test("Email RBAC Test - Client Send Invitation", True, 
+                            "Client correctly denied access to send invitations")
+                return True
+            else:
+                self.log_test("Email RBAC Test - Client Send Invitation", False, 
+                            f"Expected 403, got {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_test("Email RBAC Test - Client Send Invitation", False, f"Exception: {str(e)}")
+            return False
+
+    def test_email_validation(self):
+        """Test email validation and error handling"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Email Validation Test", False, "No tax professional token available")
+            return False
+            
+        # Test with invalid email format
+        invalid_invitation_data = {
+            "client_email": "invalid-email-format",
+            "client_first_name": "Test",
+            "client_last_name": "User"
+        }
+        
+        try:
+            response = self.make_request("POST", "/emails/send-client-invitation", invalid_invitation_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 422:  # Pydantic validation error
+                self.log_test("Email Validation Test - Invalid Email", True, 
+                            "Invalid email format correctly rejected")
+                return True
+            else:
+                self.log_test("Email Validation Test - Invalid Email", False, 
+                            f"Expected 422, got {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Email Validation Test - Invalid Email", False, f"Exception: {str(e)}")
+            return False
+
+    def test_resend_invitation_nonexistent(self):
+        """Test resending non-existent invitation"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Resend Nonexistent Invitation", False, "No tax professional token available")
+            return False
+            
+        fake_invitation_id = str(uuid.uuid4())
+        
+        try:
+            response = self.make_request("POST", f"/emails/resend-invitation/{fake_invitation_id}",
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 404:
+                self.log_test("Resend Nonexistent Invitation", True, 
+                            "Non-existent invitation correctly returns 404")
+                return True
+            else:
+                self.log_test("Resend Nonexistent Invitation", False, 
+                            f"Expected 404, got {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Resend Nonexistent Invitation", False, f"Exception: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting TaxPortal Pro API Backend Tests")
