@@ -220,6 +220,34 @@ export const invoiceAPI = {
   }
 };
 
+// Email API
+export const emailAPI = {
+  sendClientInvitation: async (invitationData) => {
+    const response = await api.post('/emails/send-client-invitation', invitationData);
+    return response.data;
+  },
+  
+  sendTestEmail: async (emailData) => {
+    const response = await api.post('/emails/send-test-email', emailData);
+    return response.data;
+  },
+  
+  sendNotification: async (notificationData) => {
+    const response = await api.post('/emails/send-notification', notificationData);
+    return response.data;
+  },
+  
+  getInvitations: async () => {
+    const response = await api.get('/emails/invitations');
+    return response.data;
+  },
+  
+  resendInvitation: async (invitationId) => {
+    const response = await api.post(`/emails/resend-invitation/${invitationId}`);
+    return response.data;
+  }
+};
+
 // Utility functions
 export const getStoredUser = () => {
   const user = localStorage.getItem('user');
