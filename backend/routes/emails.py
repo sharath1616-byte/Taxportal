@@ -4,9 +4,9 @@ from typing import Optional, Dict, Any
 from datetime import datetime, timedelta
 import uuid
 
-from ..services.email_service import email_service
-from ..utils.auth import get_current_user, require_roles
-from ..database import get_database
+from services.email_service import email_service
+from utils.auth import get_current_user, require_roles
+from database import get_database
 
 router = APIRouter()
 
