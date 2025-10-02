@@ -12,7 +12,7 @@ import concurrent.futures
 from typing import Dict, Any, List
 
 # Configuration
-BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
+BASE_URL = "https://taxpro-hub.preview.emergentagent.com/api"
 
 class AuthStressTester:
     def __init__(self):

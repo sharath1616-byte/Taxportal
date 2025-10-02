@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timedelta
 
 # Configuration
-BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
+BASE_URL = "https://taxpro-hub.preview.emergentagent.com/api"
 
 class InvoicePaymentFlowTester:
     def __init__(self):
@@ -168,7 +168,7 @@ class InvoicePaymentFlowTester:
             
         payment_data = {
             "invoice_id": self.test_invoice["id"],
-            "origin_url": "https://accountease-3.preview.emergentagent.com"
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com"
         }
         
         response = self.make_request("POST", "/payments/invoice/checkout", payment_data,
@@ -195,7 +195,7 @@ class InvoicePaymentFlowTester:
             
         payment_data = {
             "invoice_id": self.test_invoice["id"],
-            "origin_url": "https://accountease-3.preview.emergentagent.com"
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com"
         }
         
         response = self.make_request("POST", "/payments/invoice/checkout", payment_data,

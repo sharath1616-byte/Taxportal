@@ -10,7 +10,7 @@ import time
 from typing import Dict, Any
 
 # Configuration
-BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
+BASE_URL = "https://taxpro-hub.preview.emergentagent.com/api"
 
 class AuthDiagnosticTester:
     def __init__(self):

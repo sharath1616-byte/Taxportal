@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any
 
 # Configuration
-BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
+BASE_URL = "https://taxpro-hub.preview.emergentagent.com/api"
 
 class EnhancedPaymentTester:
     def __init__(self):
@@ -152,7 +152,7 @@ class EnhancedPaymentTester:
             
         payment_data = {
             "service_package": "tax_premium",
-            "origin_url": "https://accountease-3.preview.emergentagent.com",
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com",
             "metadata": {
                 "subscription_type": "platform",
                 "billing_cycle": "annual",
@@ -188,7 +188,7 @@ class EnhancedPaymentTester:
             
         payment_data = {
             "service_package": "bookkeeping_monthly",
-            "origin_url": "https://accountease-3.preview.emergentagent.com",
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com",
             "metadata": {
                 "service_type": "client_service",
                 "business_name": "Johnson Consulting LLC",
@@ -282,7 +282,7 @@ class EnhancedPaymentTester:
             
         payment_data = {
             "invoice_id": self.test_invoice_id,
-            "origin_url": "https://accountease-3.preview.emergentagent.com"
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com"
         }
         
         try:
@@ -313,7 +313,7 @@ class EnhancedPaymentTester:
             
         payment_data = {
             "invoice_id": self.test_invoice_id,
-            "origin_url": "https://accountease-3.preview.emergentagent.com"
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com"
         }
         
         try:
@@ -452,7 +452,7 @@ class EnhancedPaymentTester:
         # Test with complex metadata
         payment_data = {
             "service_package": "consultation",
-            "origin_url": "https://accountease-3.preview.emergentagent.com",
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com",
             "metadata": {
                 "consultation_type": "tax_planning",
                 "client_business_type": "LLC",

@@ -14,7 +14,7 @@ from typing import Dict, Any, Optional
 import uuid
 
 # Configuration
-BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
+BASE_URL = "https://taxpro-hub.preview.emergentagent.com/api"
 HEADERS = {"Content-Type": "application/json"}
 
 class TaxPortalAPITester:
@@ -857,7 +857,7 @@ class TaxPortalAPITester:
             
         payment_data = {
             "service_package": "tax_basic",
-            "origin_url": "https://accountease-3.preview.emergentagent.com",
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com",
             "metadata": {
                 "client_name": "John Smith",
                 "tax_year": "2024"
@@ -941,7 +941,7 @@ class TaxPortalAPITester:
             # Now create payment checkout
             payment_data = {
                 "invoice_id": invoice_id,
-                "origin_url": "https://accountease-3.preview.emergentagent.com"
+                "origin_url": "https://taxpro-hub.preview.emergentagent.com"
             }
             
             response = self.make_request("POST", "/payments/invoice/checkout", payment_data,
@@ -1088,7 +1088,7 @@ class TaxPortalAPITester:
             
         payment_data = {
             "service_package": "invalid_package_name",
-            "origin_url": "https://accountease-3.preview.emergentagent.com"
+            "origin_url": "https://taxpro-hub.preview.emergentagent.com"
         }
         
         try:
