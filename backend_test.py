@@ -807,6 +807,348 @@ class TaxPortalAPITester:
             self.log_test("Resend Existing Invitation", False, f"Exception: {str(e)}")
             return False
 
+    # PAYMENT INTEGRATION TESTS
+    def test_get_service_packages(self):
+        """Test retrieving available service packages"""
+        try:
+            response = self.make_request("GET", "/payments/services/packages")
+            if response.status_code == 200:
+                data = response.json()
+                if "packages" in data:
+                    packages = data["packages"]
+                    expected_packages = ["tax_basic", "tax_premium", "bookkeeping_monthly", "bookkeeping_quarterly", "consultation"]
+                    
+                    # Check if all expected packages are present
+                    missing_packages = [pkg for pkg in expected_packages if pkg not in packages]
+                    if not missing_packages:
+                        # Verify package structure
+                        for pkg_name, pkg_info in packages.items():
+                            required_fields = ["name", "price", "currency", "description", "features"]
+                            missing_fields = [field for field in required_fields if field not in pkg_info]
+                            if missing_fields:
+                                self.log_test("Get Service Packages", False, 
+                                            f"Package {pkg_name} missing fields: {missing_fields}")
+                                return False
+                        
+                        self.log_test("Get Service Packages", True, 
+                                    f"Retrieved {len(packages)} service packages successfully")
+                        return True
+                    else:
+                        self.log_test("Get Service Packages", False, 
+                                    f"Missing expected packages: {missing_packages}")
+                        return False
+                else:
+                    self.log_test("Get Service Packages", False, f"Missing 'packages' key in response: {data}")
+                    return False
+            else:
+                self.log_test("Get Service Packages", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Service Packages", False, f"Exception: {str(e)}")
+            return False
+
+    def test_create_service_payment_checkout(self):
+        """Test creating service payment checkout session"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Create Service Payment Checkout", False, "No tax professional token available")
+            return False
+            
+        payment_data = {
+            "service_package": "tax_basic",
+            "origin_url": "https://accountease-3.preview.emergentagent.com",
+            "metadata": {
+                "client_name": "John Smith",
+                "tax_year": "2024"
+            }
+        }
+        
+        try:
+            response = self.make_request("POST", "/payments/service/checkout", payment_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["success", "checkout_url", "session_id", "message"]
+                missing_fields = [field for field in required_fields if field not in data]
+                
+                if not missing_fields:
+                    if data["success"] and data["checkout_url"] and data["session_id"]:
+                        # Store session_id for status testing
+                        self.payment_session_id = data["session_id"]
+                        self.log_test("Create Service Payment Checkout", True, 
+                                    f"Service payment session created: {data['session_id']}")
+                        return True
+                    else:
+                        self.log_test("Create Service Payment Checkout", False, 
+                                    f"Invalid response values: {data}")
+                        return False
+                else:
+                    self.log_test("Create Service Payment Checkout", False, 
+                                f"Missing required fields: {missing_fields}")
+                    return False
+            else:
+                self.log_test("Create Service Payment Checkout", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Create Service Payment Checkout", False, f"Exception: {str(e)}")
+            return False
+
+    def test_create_invoice_payment_checkout(self):
+        """Test creating invoice payment checkout session"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Create Invoice Payment Checkout", False, "No tax professional token available")
+            return False
+            
+        # First create an invoice to pay for
+        invoice_data = {
+            "clientId": self.clients.get("main", {}).get("id") if "main" in self.clients else str(uuid.uuid4()),
+            "items": [
+                {
+                    "description": "Tax Return Preparation",
+                    "quantity": 1,
+                    "rate": 300.00,
+                    "amount": 300.00
+                }
+            ],
+            "dueDate": (datetime.now() + timedelta(days=30)).isoformat(),
+            "taxAmount": 24.00,
+            "notes": "Payment for tax services"
+        }
+        
+        try:
+            # Create invoice first
+            invoice_response = self.make_request("POST", "/invoices/", invoice_data,
+                                               token=self.tokens["tax_professional"])
+            if invoice_response.status_code != 200:
+                self.log_test("Create Invoice Payment Checkout", False, 
+                            f"Failed to create test invoice: {invoice_response.text}")
+                return False
+                
+            invoice = invoice_response.json()
+            invoice_id = invoice["id"]
+            
+            # Now create payment checkout
+            payment_data = {
+                "invoice_id": invoice_id,
+                "origin_url": "https://accountease-3.preview.emergentagent.com"
+            }
+            
+            response = self.make_request("POST", "/payments/invoice/checkout", payment_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["success", "checkout_url", "session_id", "message"]
+                missing_fields = [field for field in required_fields if field not in data]
+                
+                if not missing_fields:
+                    if data["success"] and data["checkout_url"] and data["session_id"]:
+                        # Store session_id for status testing
+                        self.invoice_payment_session_id = data["session_id"]
+                        self.log_test("Create Invoice Payment Checkout", True, 
+                                    f"Invoice payment session created: {data['session_id']}")
+                        return True
+                    else:
+                        self.log_test("Create Invoice Payment Checkout", False, 
+                                    f"Invalid response values: {data}")
+                        return False
+                else:
+                    self.log_test("Create Invoice Payment Checkout", False, 
+                                f"Missing required fields: {missing_fields}")
+                    return False
+            else:
+                self.log_test("Create Invoice Payment Checkout", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Create Invoice Payment Checkout", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_payment_status(self):
+        """Test getting payment status"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get Payment Status", False, "No tax professional token available")
+            return False
+            
+        # Use session_id from previous test if available
+        session_id = getattr(self, 'payment_session_id', None)
+        if not session_id:
+            self.log_test("Get Payment Status", True, "No payment session available (test skipped)")
+            return True
+            
+        try:
+            response = self.make_request("GET", f"/payments/status/{session_id}",
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["session_id", "status", "payment_status", "amount_total", "currency", "metadata"]
+                missing_fields = [field for field in required_fields if field not in data]
+                
+                if not missing_fields:
+                    if data["session_id"] == session_id:
+                        self.log_test("Get Payment Status", True, 
+                                    f"Payment status retrieved: {data['payment_status']} ({data['status']})")
+                        return True
+                    else:
+                        self.log_test("Get Payment Status", False, 
+                                    f"Session ID mismatch: expected {session_id}, got {data['session_id']}")
+                        return False
+                else:
+                    self.log_test("Get Payment Status", False, 
+                                f"Missing required fields: {missing_fields}")
+                    return False
+            else:
+                self.log_test("Get Payment Status", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Payment Status", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_user_payment_transactions(self):
+        """Test retrieving user payment transactions"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get User Payment Transactions", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/payments/transactions",
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "transactions" in data and "total" in data:
+                    transactions = data["transactions"]
+                    total = data["total"]
+                    
+                    # Verify transaction structure if any exist
+                    if total > 0 and len(transactions) > 0:
+                        transaction = transactions[0]
+                        required_fields = ["id", "session_id", "user_id", "amount", "currency", "payment_status"]
+                        missing_fields = [field for field in required_fields if field not in transaction]
+                        
+                        if missing_fields:
+                            self.log_test("Get User Payment Transactions", False, 
+                                        f"Transaction missing fields: {missing_fields}")
+                            return False
+                    
+                    self.log_test("Get User Payment Transactions", True, 
+                                f"Retrieved {total} payment transactions")
+                    return True
+                else:
+                    self.log_test("Get User Payment Transactions", False, 
+                                f"Missing required keys in response: {data}")
+                    return False
+            else:
+                self.log_test("Get User Payment Transactions", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get User Payment Transactions", False, f"Exception: {str(e)}")
+            return False
+
+    def test_payment_authentication_required(self):
+        """Test that payment endpoints require authentication"""
+        test_cases = [
+            ("/payments/service/checkout", "POST"),
+            ("/payments/invoice/checkout", "POST"),
+            ("/payments/transactions", "GET")
+        ]
+        
+        success_count = 0
+        for endpoint, method in test_cases:
+            try:
+                test_data = {"service_package": "tax_basic", "origin_url": "https://example.com"} if method == "POST" else {}
+                response = self.make_request(method, endpoint, test_data)  # No token
+                if response.status_code in [401, 403]:
+                    self.log_test(f"Payment Auth Required - {endpoint}", True, 
+                                f"Correctly requires authentication (HTTP {response.status_code})")
+                    success_count += 1
+                else:
+                    self.log_test(f"Payment Auth Required - {endpoint}", False, 
+                                f"Expected 401/403, got {response.status_code}")
+            except Exception as e:
+                self.log_test(f"Payment Auth Required - {endpoint}", False, f"Exception: {str(e)}")
+                
+        return success_count == len(test_cases)
+
+    def test_invalid_service_package(self):
+        """Test creating payment with invalid service package"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Invalid Service Package Test", False, "No tax professional token available")
+            return False
+            
+        payment_data = {
+            "service_package": "invalid_package_name",
+            "origin_url": "https://accountease-3.preview.emergentagent.com"
+        }
+        
+        try:
+            response = self.make_request("POST", "/payments/service/checkout", payment_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 400:
+                self.log_test("Invalid Service Package Test", True, 
+                            "Invalid service package correctly rejected")
+                return True
+            else:
+                self.log_test("Invalid Service Package Test", False, 
+                            f"Expected 400, got {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Invalid Service Package Test", False, f"Exception: {str(e)}")
+            return False
+
+    def test_payment_status_access_control(self):
+        """Test payment status access control"""
+        if "client" not in self.tokens or "tax_professional" not in self.tokens:
+            self.log_test("Payment Status Access Control", False, "Missing required tokens")
+            return False
+            
+        # Use session_id from previous test if available
+        session_id = getattr(self, 'payment_session_id', None)
+        if not session_id:
+            self.log_test("Payment Status Access Control", True, "No payment session available (test skipped)")
+            return True
+            
+        try:
+            # Try to access payment status with different user (should fail)
+            response = self.make_request("GET", f"/payments/status/{session_id}",
+                                       token=self.tokens["client"])
+            if response.status_code == 403:
+                self.log_test("Payment Status Access Control", True, 
+                            "Payment status access correctly restricted")
+                return True
+            elif response.status_code == 404:
+                self.log_test("Payment Status Access Control", True, 
+                            "Payment session not found for different user (correct behavior)")
+                return True
+            else:
+                self.log_test("Payment Status Access Control", False, 
+                            f"Expected 403 or 404, got {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Payment Status Access Control", False, f"Exception: {str(e)}")
+            return False
+
+    def test_stripe_webhook_endpoint(self):
+        """Test Stripe webhook endpoint (basic structure test)"""
+        try:
+            # Test webhook endpoint without signature (should fail)
+            response = self.make_request("POST", "/payments/webhook/stripe", {"test": "data"})
+            if response.status_code == 400:
+                if "Missing Stripe signature" in response.text:
+                    self.log_test("Stripe Webhook Endpoint", True, 
+                                "Webhook correctly requires Stripe signature")
+                    return True
+                else:
+                    self.log_test("Stripe Webhook Endpoint", False, 
+                                f"Unexpected error message: {response.text}")
+                    return False
+            else:
+                self.log_test("Stripe Webhook Endpoint", False, 
+                            f"Expected 400, got {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Stripe Webhook Endpoint", False, f"Exception: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting TaxPortal Pro API Backend Tests")
