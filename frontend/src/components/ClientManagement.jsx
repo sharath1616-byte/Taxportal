@@ -148,18 +148,81 @@ const ClientManagement = () => {
       };
       
       setClients([...clients, newClient]);
-      setNewClientForm({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        company: '',
-        address: ''
-      });
+      resetClientForm();
       setShowAddClient(false);
     } catch (error) {
       console.error('Error adding client:', error);
     }
+  };
+
+  const handleEditClient = (client) => {
+    setEditingClient(client);
+    setNewClientForm({
+      firstName: client.firstName || '',
+      lastName: client.lastName || '',
+      email: client.email || '',
+      phone: client.phone || '',
+      company: client.company || '',
+      address: client.address || '',
+      entityType: client.entityType || 'individual',
+      taxFormType: client.taxFormType || '1040',
+      salesTaxCompliance: client.salesTaxCompliance || false,
+      payrollCompliance: client.payrollCompliance || false,
+      quarterlyFilings: client.quarterlyFilings || false,
+      annualFilings: client.annualFilings !== undefined ? client.annualFilings : true,
+      businessLicense: client.businessLicense || '',
+      federalEIN: client.federalEIN || '',
+      stateID: client.stateID || '',
+      complianceNotes: client.complianceNotes || ''
+    });
+    setShowEditClient(true);
+  };
+
+  const handleUpdateClient = async (e) => {
+    e.preventDefault();
+    try {
+      // Mock implementation - replace with real API call
+      const updatedClients = clients.map(client => 
+        client.id === editingClient.id 
+          ? { ...client, ...newClientForm }
+          : client
+      );
+      
+      setClients(updatedClients);
+      
+      // Update selected client if it's currently being viewed
+      if (selectedClient && selectedClient.id === editingClient.id) {
+        setSelectedClient({ ...selectedClient, ...newClientForm });
+      }
+      
+      resetClientForm();
+      setShowEditClient(false);
+      setEditingClient(null);
+      alert('Client updated successfully!');
+    } catch (error) {
+      console.error('Error updating client:', error);
+    }
+  };
+
+  const resetClientForm = () => {
+    setNewClientForm({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      company: '',
+      address: '',
+      entityType: 'individual',
+      taxFormType: '1040',
+      salesTaxCompliance: false,
+      payrollCompliance: false,
+      quarterlyFilings: false,
+      annualFilings: true,
+      businessLicense: '',
+      federalEIN: '',
+      stateID: '',
+      complianceNotes: ''
+    });
   };
 
   const getStatusColor = (status) => {
