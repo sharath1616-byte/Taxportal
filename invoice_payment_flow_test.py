@@ -145,19 +145,19 @@ class InvoicePaymentFlowTester:
             self.log_test("Tax Professional Creates Invoice", False, f"HTTP {response.status_code}: {response.text}")
             return False
 
-    def test_step2_verify_invoice_status_unpaid(self):
-        """Step 2: Verify invoice is initially unpaid"""
+    def test_step2_verify_invoice_status_draft(self):
+        """Step 2: Verify invoice is initially in draft status"""
         if not self.test_invoice:
-            self.log_test("Verify Invoice Status Unpaid", False, "No test invoice available")
+            self.log_test("Verify Invoice Status Draft", False, "No test invoice available")
             return False
             
-        if self.test_invoice.get("status") == "unpaid":
-            self.log_test("Verify Invoice Status Unpaid", True, 
-                        f"Invoice status correctly set to 'unpaid': {self.test_invoice['status']}")
+        if self.test_invoice.get("status") == "draft":
+            self.log_test("Verify Invoice Status Draft", True, 
+                        f"Invoice status correctly set to 'draft': {self.test_invoice['status']}")
             return True
         else:
-            self.log_test("Verify Invoice Status Unpaid", False, 
-                        f"Expected 'unpaid', got: {self.test_invoice.get('status')}")
+            self.log_test("Verify Invoice Status Draft", False, 
+                        f"Expected 'draft', got: {self.test_invoice.get('status')}")
             return False
 
     def test_step3_tax_professional_creates_payment_checkout(self):
