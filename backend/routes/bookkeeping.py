@@ -3,13 +3,13 @@ from typing import List, Optional
 from datetime import datetime, date
 import uuid
 
-from ..models.bookkeeping import (
+from models.bookkeeping import (
     BookkeepingService, BookkeepingTask, BookkeepingTimeEntry, BookkeepingReport,
     BookkeepingServiceCreate, BookkeepingTaskCreate, TimeEntryCreate, BookkeepingServiceUpdate,
     BookkeepingServiceType, BookkeepingStatus, BookkeepingFrequency
 )
-from ..utils.auth import get_current_user, require_roles
-from ..database import get_database
+from utils.auth import get_current_user, require_roles
+from database import get_database
 
 router = APIRouter(prefix="/api/bookkeeping", tags=["bookkeeping"])
 
