@@ -197,63 +197,91 @@ const PaymentIntegration = () => {
           </div>
         )}
 
-        {/* Service Packages */}
-        <div className="mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Available Services
-              </CardTitle>
-              <CardDescription>
-                Choose from our professional tax and bookkeeping service packages
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Object.entries(servicePackages).map(([packageId, packageInfo]) => (
-                  <div key={packageId} className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow">
-                    <div className="text-center mb-4">
-                      <h3 className="text-xl font-semibold mb-2">{packageInfo.name}</h3>
-                      <div className="text-3xl font-bold text-blue-600 mb-2">
-                        {formatCurrency(packageInfo.price, packageInfo.currency)}
-                      </div>
-                      <p className="text-gray-600 text-sm">{packageInfo.description}</p>
-                    </div>
-                    
-                    <div className="space-y-3 mb-6">
-                      {packageInfo.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-start space-x-2">
-                          <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{feature}</span>
+        {/* Service Packages - Only show for tax professionals */}
+        {user?.role === 'tax_professional' && (
+          <div className="mb-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  Available Services
+                </CardTitle>
+                <CardDescription>
+                  Choose from our professional tax and bookkeeping service packages
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Object.entries(servicePackages).map(([packageId, packageInfo]) => (
+                    <div key={packageId} className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow">
+                      <div className="text-center mb-4">
+                        <h3 className="text-xl font-semibold mb-2">{packageInfo.name}</h3>
+                        <div className="text-3xl font-bold text-blue-600 mb-2">
+                          {formatCurrency(packageInfo.price, packageInfo.currency)}
                         </div>
-                      ))}
+                        <p className="text-gray-600 text-sm">{packageInfo.description}</p>
+                      </div>
+                      
+                      <div className="space-y-3 mb-6">
+                        {packageInfo.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-start space-x-2">
+                            <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-sm text-gray-700">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <Button 
+                        onClick={() => handleServicePayment(packageId)}
+                        disabled={isProcessingPayment}
+                        className="w-full"
+                      >
+                        {isProcessingPayment ? (
+                          <>
+                            <Loader className="w-4 h-4 mr-2 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Purchase Service
+                          </>
+                        )}
+                      </Button>
                     </div>
-                    
-                    <Button 
-                      onClick={() => handleServicePayment(packageId)}
-                      disabled={isProcessingPayment}
-                      className="w-full"
-                    >
-                      {isProcessingPayment ? (
-                        <>
-                          <Loader className="w-4 h-4 mr-2 animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <CreditCard className="w-4 h-4 mr-2" />
-                          Purchase Service
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Client Invoice Payments Section - Only show for clients */}
+        {user?.role === 'client' && (
+          <div className="mb-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Receipt className="w-5 h-5 mr-2" />
+                  Invoice Payments
+                </CardTitle>
+                <CardDescription>
+                  Pay your outstanding invoices securely
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <Receipt className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No Outstanding Invoices</h3>
+                  <p className="text-gray-600">
+                    You currently have no unpaid invoices. Check back later or contact your tax professional.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Payment History */}
         <Card>
