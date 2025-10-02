@@ -210,24 +210,32 @@ const SimpleDashboard = () => {
                       <Receipt className="w-4 h-4 mr-2" />
                       View Invoices
                     </Button>
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/payments')}
+                    >
+                      <Receipt className="w-4 h-4 mr-2" />
+                      Make Payment
+                    </Button>
                   </>
                 ) : (
                   <>
                     <Button 
                       className="w-full justify-start" 
                       variant="outline"
-                      onClick={() => navigate('/invite-clients')}
+                      onClick={() => navigate('/clients')}
                     >
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Invite Clients
+                      <Users className="w-4 h-4 mr-2" />
+                      Manage Clients
                     </Button>
                     <Button 
                       className="w-full justify-start" 
                       variant="outline"
-                      onClick={() => navigate('/email-integration')}
+                      onClick={() => navigate('/employees')}
                     >
-                      <Mail className="w-4 h-4 mr-2" />
-                      Email Integration
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Manage Team
                     </Button>
                     <Button 
                       className="w-full justify-start" 
@@ -240,10 +248,10 @@ const SimpleDashboard = () => {
                     <Button 
                       className="w-full justify-start" 
                       variant="outline"
-                      onClick={() => navigate('/messages')}
+                      onClick={() => navigate('/email-integration')}
                     >
-                      <MessageSquare className="w-4 h-4 mr-2" />
-                      Send Message
+                      <Mail className="w-4 h-4 mr-2" />
+                      Email Integration
                     </Button>
                   </>
                 )}
