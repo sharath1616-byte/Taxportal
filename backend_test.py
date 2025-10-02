@@ -763,6 +763,50 @@ class TaxPortalAPITester:
             self.log_test("Resend Nonexistent Invitation", False, f"Exception: {str(e)}")
             return False
 
+    def test_resend_existing_invitation(self):
+        """Test resending an existing invitation"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Resend Existing Invitation", False, "No tax professional token available")
+            return False
+            
+        # First get the invitations to find an existing one
+        try:
+            response = self.make_request("GET", "/emails/invitations", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("total", 0) > 0:
+                    invitation_id = data["invitations"][0]["id"]
+                    
+                    # Now try to resend it
+                    resend_response = self.make_request("POST", f"/emails/resend-invitation/{invitation_id}",
+                                                      token=self.tokens["tax_professional"])
+                    if resend_response.status_code == 200:
+                        resend_data = resend_response.json()
+                        if "message" in resend_data and "resent successfully" in resend_data["message"]:
+                            self.log_test("Resend Existing Invitation", True, 
+                                        f"Invitation resent successfully: {resend_data['message']}")
+                            return True
+                        else:
+                            self.log_test("Resend Existing Invitation", False, 
+                                        f"Unexpected response: {resend_data}")
+                            return False
+                    else:
+                        self.log_test("Resend Existing Invitation", False, 
+                                    f"HTTP {resend_response.status_code}: {resend_response.text}")
+                        return False
+                else:
+                    self.log_test("Resend Existing Invitation", True, 
+                                "No invitations to resend (test skipped)")
+                    return True
+            else:
+                self.log_test("Resend Existing Invitation", False, 
+                            f"Failed to get invitations: HTTP {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_test("Resend Existing Invitation", False, f"Exception: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting TaxPortal Pro API Backend Tests")
