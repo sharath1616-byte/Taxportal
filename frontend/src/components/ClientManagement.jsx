@@ -933,7 +933,7 @@ const ClientManagement = () => {
                 </div>
               </div>
               <div className="flex space-x-2">
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => handleEditClient(selectedClient)}>
                   <Settings className="w-4 h-4 mr-2" />
                   Edit Client
                 </Button>
