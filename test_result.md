@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the TaxPortal Pro API backend thoroughly. I have implemented a comprehensive tax and accounting client portal with authentication, role-based access control, CRUD operations for clients/documents/tasks/messages/invoices, file uploads, and error handling."
+user_problem_statement: "Expand the TaxPortal Pro with major new features: Email integration, Payment gateway for invoices, 2FA + reCAPTCHA security, Bookkeeping services expansion, White-label solution, and improved client invitation system. Fix compilation errors and enhance the existing simple portal."
 
 backend:
   - task: "API Health Check"
