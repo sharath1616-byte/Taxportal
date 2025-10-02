@@ -24,6 +24,7 @@ import EnhancedPricingPage from "./components/EnhancedPricingPage";
 import EnhancedInvoices from "./components/EnhancedInvoices";
 import PlatformSubscription from "./components/PlatformSubscription";
 import ClientServicesManagement from "./components/ClientServicesManagement";
+import ComplianceTracker from "./components/ComplianceTracker";
 
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
