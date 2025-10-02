@@ -8,7 +8,7 @@ from services.email_service import email_service
 from utils.auth import get_current_user, require_role
 from database import get_database
 
-router = APIRouter()
+router = APIRouter(prefix="/emails", tags=["Email Integration"])
 
 # Pydantic models for email requests
 class ClientInvitationRequest(BaseModel):
