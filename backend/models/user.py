@@ -27,9 +27,15 @@ class User(BaseModel):
 
 class UserCreate(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=1, description="Password cannot be empty")
     role: UserRole
     profile: UserProfile
+    
+    @validator('password')
+    def validate_password(cls, v):
+        if not v or not v.strip():
+            raise ValueError('Password cannot be empty or whitespace only')
+        return v
 
 class UserResponse(BaseModel):
     id: str
