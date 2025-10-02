@@ -569,12 +569,16 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Client Invoice Payment Issue Fix"
+    - "Edit Client Functionality Fix" 
+    - "Client Management UI Scrolling Fix"
     - "Enhanced Authentication (2FA + reCAPTCHA)"
     - "Bookkeeping Services Expansion"
     - "White-Label Solution"
+    - "Payment Section UI Cleanup"
   stuck_tasks: []
   test_all: true
-  test_priority: "comprehensive_completed"
+  test_priority: "high_first"
 
 agent_communication:
     - agent: "testing"
