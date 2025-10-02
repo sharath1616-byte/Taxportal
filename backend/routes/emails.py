@@ -53,7 +53,7 @@ async def send_client_invitation(
         invitation_link = f"{request.client_email}?token={invitation_token}"
         
         client_name = f"{request.client_first_name} {request.client_last_name}"
-        professional_name = current_user.get("name", "Your Tax Professional")
+        professional_name = current_user.get("email", "Your Tax Professional")
         
         # Store invitation in database
         db = await get_database()
@@ -62,7 +62,7 @@ async def send_client_invitation(
             "token": invitation_token,
             "client_email": request.client_email,
             "client_name": client_name,
-            "professional_id": current_user["id"], 
+            "professional_id": current_user["user_id"], 
             "professional_name": professional_name,
             "personal_message": request.personal_message,
             "status": "pending",
