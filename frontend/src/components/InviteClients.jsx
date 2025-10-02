@@ -35,26 +35,52 @@ const InviteClients = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
 
+  // Load invitations on component mount
+  useEffect(() => {
+    loadInvitations();
+  }, []);
+
+  const loadInvitations = async () => {
+    try {
+      setIsLoading(true);
+      const data = await emailAPI.getInvitations();
+      setInvitations(data.invitations || []);
+    } catch (err) {
+      setError('Failed to load invitations');
+      console.error('Error loading invitations:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleInviteSubmit = async (e) => {
     e.preventDefault();
     setIsInviting(true);
+    setError(null);
+    setSuccessMessage('');
 
-    // Mock invitation sending
-    setTimeout(() => {
-      const newInvitation = {
-        id: Date.now(),
-        email: inviteForm.email,
-        name: `${inviteForm.firstName} ${inviteForm.lastName}`,
-        status: 'pending',
-        sentDate: new Date().toISOString().split('T')[0],
-        expiresDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-      };
-
-      setInvitations(prev => [newInvitation, ...prev]);
-      setInviteForm({ email: '', firstName: '', lastName: '', message: inviteForm.message });
+    try {
+      const response = await emailAPI.sendClientInvitation(inviteForm);
+      
+      setSuccessMessage(`Invitation sent successfully to ${inviteForm.client_email}!`);
+      
+      // Reset form (keep message and provider)
+      setInviteForm({
+        ...inviteForm,
+        client_email: '',
+        client_first_name: '',
+        client_last_name: ''
+      });
+      
+      // Reload invitations to show the new one
+      await loadInvitations();
+      
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to send invitation. Please try again.');
+      console.error('Error sending invitation:', err);
+    } finally {
       setIsInviting(false);
-      alert('Invitation sent successfully!');
-    }, 2000);
+    }
   };
 
   const getStatusBadge = (status) => {
