@@ -111,7 +111,7 @@ const EmailIntegration = () => {
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
                 <div className="bg-blue-100 p-3 rounded-full w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-                  <Sync className="w-6 h-6 text-blue-600" />
+                  <RefreshCw className="w-6 h-6 text-blue-600" />
                 </div>
                 <h3 className="font-semibold mb-2">Auto-Sync Emails</h3>
                 <p className="text-sm text-gray-600">
