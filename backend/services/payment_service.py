@@ -3,6 +3,7 @@ import uuid
 from typing import Dict, Any, Optional
 from datetime import datetime
 from fastapi import Request, HTTPException
+from dotenv import load_dotenv
 
 from emergentintegrations.payments.stripe.checkout import (
     StripeCheckout, 
@@ -11,6 +12,9 @@ from emergentintegrations.payments.stripe.checkout import (
     CheckoutSessionRequest
 )
 from database import get_database
+
+# Load environment variables
+load_dotenv()
 
 class PaymentService:
     """
