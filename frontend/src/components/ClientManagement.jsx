@@ -968,7 +968,10 @@ const ClientManagement = () => {
                       </div>
                     </CardContent>
                     <div className="flex justify-end space-x-2 p-6 pt-0">
-                      <Button type="button" variant="outline" onClick={() => setShowAddClient(false)}>
+                      <Button type="button" variant="outline" onClick={() => {
+                        setShowAddClient(false);
+                        resetClientForm();
+                      }}>
                         Cancel
                       </Button>
                       <Button type="submit">
