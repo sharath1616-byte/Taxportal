@@ -37,6 +37,7 @@ api_router.include_router(documents.router)
 api_router.include_router(tasks.router)
 api_router.include_router(messages.router)
 api_router.include_router(invoices.router)
+api_router.include_router(emails.router)
 
 # Include the router in the main app
 app.include_router(api_router)
