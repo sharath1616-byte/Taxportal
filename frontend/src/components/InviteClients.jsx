@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import SimpleNavbar from './SimpleNavbar';
+import { emailAPI } from '../services/api';
 import { 
   UserPlus, 
   Mail, 
@@ -13,7 +15,9 @@ import {
   Send,
   Check,
   Clock,
-  X
+  X,
+  AlertCircle,
+  Loader
 } from 'lucide-react';
 
 const InviteClients = () => {
