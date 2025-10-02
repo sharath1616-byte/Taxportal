@@ -83,7 +83,7 @@ async def create_invoice_payment_checkout(
         # Create checkout session
         session = await payment_service.create_invoice_payment_session(
             invoice_id=request_data.invoice_id,
-            amount=float(invoice["total_amount"]),
+            amount=float(invoice["totalAmount"]),
             currency="usd",
             user_id=current_user["user_id"],
             origin_url=request_data.origin_url,
