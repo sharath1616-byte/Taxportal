@@ -24,6 +24,7 @@ import {
 
 const PaymentIntegration = () => {
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState(user?.role === 'tax_professional' ? 'platform' : 'client_services');
   const [servicePackages, setServicePackages] = useState({});
   const [userTransactions, setUserTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
