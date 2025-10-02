@@ -248,6 +248,41 @@ export const emailAPI = {
   }
 };
 
+// Payment API
+export const paymentAPI = {
+  createInvoicePayment: async (invoiceId, originUrl) => {
+    const response = await api.post('/payments/invoice/checkout', {
+      invoice_id: invoiceId,
+      origin_url: originUrl
+    });
+    return response.data;
+  },
+  
+  createServicePayment: async (servicePackage, originUrl, metadata = null) => {
+    const response = await api.post('/payments/service/checkout', {
+      service_package: servicePackage,
+      origin_url: originUrl,
+      metadata: metadata
+    });
+    return response.data;
+  },
+  
+  getPaymentStatus: async (sessionId) => {
+    const response = await api.get(`/payments/status/${sessionId}`);
+    return response.data;
+  },
+  
+  getUserTransactions: async () => {
+    const response = await api.get('/payments/transactions');
+    return response.data;
+  },
+  
+  getServicePackages: async () => {
+    const response = await api.get('/payments/services/packages');
+    return response.data;
+  }
+};
+
 // Utility functions
 export const getStoredUser = () => {
   const user = localStorage.getItem('user');
