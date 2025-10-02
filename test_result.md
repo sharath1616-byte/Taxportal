@@ -321,9 +321,9 @@ frontend:
 
   - task: "User Registration System"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/components/auth/RegisterForm.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -333,6 +333,9 @@ frontend:
         - working: true
           agent: "testing"
           comment: "✅ Registration form loads and functions correctly. ✅ Form fields (name, email, role selection, password) work properly. ✅ Role selection dropdown works for Tax Professional and Client. ✅ Form submission successful - redirects to dashboard after registration. ✅ Password confirmation validation working."
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL: Registration form role selection dropdown has UI issues. Tax Professional option not selectable via automation testing (shadcn/ui Select component issue). Submit button remains disabled when role not selected. All other form fields work correctly. Form validation working. This prevents complete registration flow testing but is likely a UI component interaction issue rather than functional failure."
 
   - task: "User Login System"
     implemented: true
