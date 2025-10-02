@@ -22,7 +22,8 @@ import {
   Calendar,
   DollarSign,
   UserCheck,
-  MoreVertical
+  MoreVertical,
+  User
 } from 'lucide-react';
 
 const ClientManagement = () => {
