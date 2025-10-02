@@ -782,6 +782,15 @@ class TaxPortalAPITester:
             self.test_create_task,
             self.test_send_message,
             self.test_create_invoice,
+            # Email Integration Tests
+            self.test_send_client_invitation_email,
+            self.test_send_test_email,
+            self.test_send_notification_email,
+            self.test_get_sent_invitations,
+            self.test_email_authentication_required,
+            self.test_email_role_based_access,
+            self.test_email_validation,
+            self.test_resend_invitation_nonexistent,
             self.test_logout
         ]
         
