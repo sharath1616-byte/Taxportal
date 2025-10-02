@@ -70,7 +70,7 @@ function App() {
               path="/invoices" 
               element={
                 <ProtectedRoute>
-                  <SimpleInvoices />
+                  <EnhancedInvoices />
                 </ProtectedRoute>
               } 
             />
