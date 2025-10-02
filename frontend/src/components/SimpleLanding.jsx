@@ -79,7 +79,7 @@ const SimpleLanding = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SimpleNavbar />
+      <LandingNavbar />
       
       {/* Hero Section */}
       <div className="bg-white">
