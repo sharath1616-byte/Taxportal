@@ -835,6 +835,7 @@ class TaxPortalAPITester:
             self.test_email_role_based_access,
             self.test_email_validation,
             self.test_resend_invitation_nonexistent,
+            self.test_resend_existing_invitation,
             self.test_logout
         ]
         
