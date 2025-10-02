@@ -77,6 +77,14 @@ const SimpleNavbar = () => {
                   Invoices
                 </Button>
               </Link>
+              <Link to="/payments">
+                <Button 
+                  variant={isActive('/payments') ? 'default' : 'ghost'}
+                  size="sm"
+                >
+                  Payments
+                </Button>
+              </Link>
               {user?.role === 'tax_professional' && (
                 <>
                   <Link to="/invite-clients">
