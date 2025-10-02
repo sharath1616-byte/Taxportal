@@ -1178,6 +1178,16 @@ class TaxPortalAPITester:
             self.test_email_validation,
             self.test_resend_invitation_nonexistent,
             self.test_resend_existing_invitation,
+            # Payment Integration Tests
+            self.test_get_service_packages,
+            self.test_create_service_payment_checkout,
+            self.test_create_invoice_payment_checkout,
+            self.test_get_payment_status,
+            self.test_get_user_payment_transactions,
+            self.test_payment_authentication_required,
+            self.test_invalid_service_package,
+            self.test_payment_status_access_control,
+            self.test_stripe_webhook_endpoint,
             self.test_logout
         ]
         
