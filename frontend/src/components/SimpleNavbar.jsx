@@ -139,8 +139,32 @@ const SimpleNavbar = () => {
                       Compliance
                     </Button>
                   </Link>
+                  <Link to="/bookkeeping">
+                    <Button 
+                      variant={isActive('/bookkeeping') ? 'default' : 'ghost'}
+                      size="sm"
+                    >
+                      Bookkeeping
+                    </Button>
+                  </Link>
+                  <Link to="/white-label">
+                    <Button 
+                      variant={isActive('/white-label') ? 'default' : 'ghost'}
+                      size="sm"
+                    >
+                      White Label
+                    </Button>
+                  </Link>
                 </>
               )}
+              <Link to="/security">
+                <Button 
+                  variant={isActive('/security') ? 'default' : 'ghost'}
+                  size="sm"
+                >
+                  Security
+                </Button>
+              </Link>
             </div>
           </div>
           
