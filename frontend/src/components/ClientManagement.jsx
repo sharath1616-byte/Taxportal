@@ -40,7 +40,17 @@ const ClientManagement = () => {
     email: '',
     phone: '',
     company: '',
-    address: ''
+    address: '',
+    entityType: 'individual',
+    taxFormType: '1040',
+    salesTaxCompliance: false,
+    payrollCompliance: false,
+    quarterlyFilings: false,
+    annualFilings: true,
+    businessLicense: '',
+    federalEIN: '',
+    stateID: '',
+    complianceNotes: ''
   });
 
   // Mock client data with expanded information
