@@ -25,74 +25,153 @@ import {
 } from 'lucide-react';
 
 const PricingPage = () => {
+  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePurchase = async (planId, planName, price) => {
+    try {
+      setIsProcessing(true);
+      const originUrl = window.location.origin;
+      
+      const response = await paymentAPI.createServicePayment(
+        planId, 
+        originUrl, 
+        { plan_name: planName, billing_cycle: billingCycle }
+      );
+      
+      if (response.success && response.checkout_url) {
+        window.location.href = response.checkout_url;
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Failed to initiate payment. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const plans = [
     {
-      name: "Starter",
-      price: 29,
-      period: "month",
-      description: "Perfect for solo practitioners",
-      popular: false,
-      icon: <Zap className="w-6 h-6" />,
+      id: 'starter',
+      name: 'Starter',
+      price: { monthly: 29, yearly: 290 },
+      period: billingCycle === 'monthly' ? 'per month' : 'per year',
+      description: 'Perfect for individual tax professionals getting started',
+      icon: <Briefcase className="w-8 h-8 text-blue-500" />,
       features: [
-        "Up to 25 clients",
-        "Document management",
-        "Basic messaging",
-        "Invoice creation",
-        "Email notifications",
-        "Mobile app access",
-        "Standard support"
+        'Up to 25 active clients',
+        '5GB document storage',
+        'Basic invoicing & payments',
+        'Email support',
+        'Client portal access',
+        'Standard reporting',
+        'Mobile app access'
       ],
-      limitations: [
-        "No payment processing",
-        "Basic email integration",
-        "Standard templates only"
-      ]
+      badge: null,
+      buttonText: 'Get Started',
+      buttonVariant: 'outline',
+      popular: false
     },
     {
-      name: "Professional",
-      price: 79,
-      period: "month", 
-      description: "Ideal for growing practices",
-      popular: true,
-      icon: <Star className="w-6 h-6" />,
+      id: 'professional',
+      name: 'Professional',
+      price: { monthly: 79, yearly: 790 },
+      period: billingCycle === 'monthly' ? 'per month' : 'per year',
+      description: 'Ideal for growing practices with advanced needs',
+      icon: <Building className="w-8 h-8 text-green-500" />,
       features: [
-        "Up to 100 clients",
-        "Advanced document management",
-        "Client portal & messaging",
-        "Automated invoicing",
-        "Payment gateway integration",
-        "Email sync & automation",
-        "Client invitation system",
-        "Two-factor authentication",
-        "Bookkeeping tools",
-        "Tax preparation workflows",
-        "Priority support",
-        "API access"
+        'Up to 100 active clients',
+        '50GB document storage',
+        'Advanced invoicing & payments',
+        'Priority email & phone support',
+        'Custom branding & templates',
+        'Advanced reporting & analytics',
+        'Team collaboration (3 users)',
+        'API access',
+        'Client communication tools',
+        'Automated workflows'
       ],
-      limitations: []
+      badge: 'Most Popular',
+      buttonText: 'Start Free Trial',
+      buttonVariant: 'default',
+      popular: true
     },
     {
-      name: "Enterprise",
-      price: 199,
-      period: "month",
-      description: "For large accounting firms",
-      popular: false,
-      icon: <Crown className="w-6 h-6" />,
+      id: 'enterprise',
+      name: 'Enterprise',
+      price: { monthly: 199, yearly: 1990 },
+      period: billingCycle === 'monthly' ? 'per month' : 'per year',
+      description: 'Complete solution for large practices and firms',
+      icon: <Crown className="w-8 h-8 text-purple-500" />,
       features: [
-        "Unlimited clients",
-        "White label portal",
-        "Custom domain & branding",
-        "Advanced payment processing",
-        "Full email integration",
-        "Multi-user management",
-        "Advanced reporting",
-        "Custom workflows",
-        "API & integrations",
-        "Dedicated account manager",
-        "24/7 priority support",
-        "Custom development"
+        'Unlimited clients',
+        'Unlimited document storage',
+        'Enterprise-grade security',
+        '24/7 priority support',
+        'Advanced user management (25 users)',
+        'Custom integrations',
+        'Compliance reporting',
+        'Dedicated account manager',
+        'SLA guarantee (99.9% uptime)',
+        'Advanced analytics dashboard'
       ],
-      limitations: []
+      badge: 'Best Value',
+      buttonText: 'Contact Sales',
+      buttonVariant: 'outline',
+      popular: false
+    },
+    {
+      id: 'white_label',
+      name: 'White Label',
+      price: { monthly: 499, yearly: 4990 },
+      period: billingCycle === 'monthly' ? 'per month' : 'per year',
+      description: 'Complete white-label solution for agencies and software companies',
+      icon: <Layers className="w-8 h-8 text-orange-500" />,
+      features: [
+        'Unlimited clients & users',
+        'Complete white-label branding',
+        'Custom domain & SSL',
+        'Remove all TaxPortal branding',
+        'Custom logo & color schemes',
+        'Branded invoices & documents',
+        'Custom email templates',
+        'White-label mobile apps',
+        'Dedicated infrastructure',
+        'Priority development support',
+        'Revenue sharing options'
+      ],
+      badge: 'White Label',
+      buttonText: 'Schedule Demo',
+      buttonVariant: 'gradient',
+      popular: false,
+      isWhiteLabel: true
+    }
+  ];
+
+  const addOns = [
+    {
+      name: 'Additional Users',
+      description: 'Add more team members to your account',
+      price: { monthly: 15, yearly: 150 },
+      icon: <Users className="w-6 h-6 text-blue-500" />
+    },
+    {
+      name: 'Extra Storage',
+      description: '100GB additional document storage',
+      price: { monthly: 10, yearly: 100 },
+      icon: <FileText className="w-6 h-6 text-green-500" />
+    },
+    {
+      name: 'Premium Support',
+      description: '24/7 phone support & dedicated success manager',
+      price: { monthly: 50, yearly: 500 },
+      icon: <Shield className="w-6 h-6 text-purple-500" />
+    },
+    {
+      name: 'Custom Integrations',
+      description: 'Connect with your existing software & systems',
+      price: { monthly: 99, yearly: 990 },
+      icon: <Settings className="w-6 h-6 text-orange-500" />
     }
   ];
 
