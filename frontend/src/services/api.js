@@ -46,6 +46,10 @@ api.interceptors.response.use(
 export const authAPI = {
   register: async (userData) => {
     const response = await api.post('/auth/register', userData);
+    if (response.data.access_token) {
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
     return response.data;
   },
   
