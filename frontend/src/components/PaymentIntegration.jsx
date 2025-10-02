@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import SimpleNavbar from './SimpleNavbar';
+import PlatformSubscription from './PlatformSubscription';
+import ClientServicesManagement from './ClientServicesManagement';
 import { 
   CreditCard, 
   DollarSign, 
@@ -13,7 +15,11 @@ import {
   AlertCircle,
   ShoppingCart,
   Receipt,
-  Loader
+  Loader,
+  Building,
+  Package,
+  Users,
+  Crown
 } from 'lucide-react';
 
 const PaymentIntegration = () => {
