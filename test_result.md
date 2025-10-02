@@ -578,8 +578,6 @@ test_plan:
     - "Client Invoice Payment Issue Fix"
     - "Edit Client Functionality Fix" 
     - "Client Management UI Scrolling Fix"
-    - "Enhanced Authentication (2FA + reCAPTCHA)"
-    - "Bookkeeping Services Expansion"
     - "White-Label Solution"
     - "Payment Section UI Cleanup"
   stuck_tasks: []
