@@ -298,15 +298,15 @@ const InviteClients = () => {
                             {getStatusIcon(invitation.status)}
                           </div>
                           <div>
-                            <h3 className="font-medium text-gray-900">{invitation.name}</h3>
+                            <h3 className="font-medium text-gray-900">{invitation.client_name}</h3>
                             <div className="flex items-center space-x-4 text-sm text-gray-500">
-                              <span>{invitation.email}</span>
-                              <span>Sent: {invitation.sentDate}</span>
+                              <span>{invitation.client_email}</span>
+                              <span>Sent: {new Date(invitation.created_at).toLocaleDateString()}</span>
                               {invitation.status === 'pending' && (
-                                <span>Expires: {invitation.expiresDate}</span>
+                                <span>Expires: {new Date(invitation.expires_at).toLocaleDateString()}</span>
                               )}
-                              {invitation.status === 'accepted' && (
-                                <span className="text-green-600">Accepted: {invitation.acceptedDate}</span>
+                              {invitation.status === 'accepted' && invitation.accepted_at && (
+                                <span className="text-green-600">Accepted: {new Date(invitation.accepted_at).toLocaleDateString()}</span>
                               )}
                             </div>
                           </div>
