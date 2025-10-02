@@ -11,7 +11,7 @@ import {
   Settings, 
   Check,
   AlertCircle,
-  Sync,
+  RefreshCw,
   Zap,
   Shield
 } from 'lucide-react';
