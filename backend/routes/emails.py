@@ -164,6 +164,11 @@ async def get_sent_invitations(
             {"professional_id": current_user["user_id"]}
         ).to_list(length=None)
         
+        # Convert ObjectId to string for JSON serialization
+        for invitation in invitations:
+            if "_id" in invitation:
+                invitation["_id"] = str(invitation["_id"])
+        
         return {
             "invitations": invitations,
             "total": len(invitations)
