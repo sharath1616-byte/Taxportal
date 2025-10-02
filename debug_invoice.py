@@ -39,9 +39,29 @@ def test_invoice_lookup():
     
     print(f"User registered: {user_id}")
     
+    # Create another user to be the client
+    client_user_data = {
+        "role": "client",
+        "email": f"debugclient{timestamp}@example.com",
+        "password": "DebugPass123!",
+        "profile": {
+            "firstName": "Debug",
+            "lastName": "Client",
+            "phone": "+1987654321"
+        }
+    }
+    
+    response = requests.post(f"{BASE_URL}/auth/register", json=client_user_data)
+    if response.status_code != 200:
+        print(f"Client user registration failed: {response.text}")
+        return
+        
+    client_user_data_response = response.json()
+    client_user_id = client_user_data_response["user"]["id"]
+    
     # Create a client relationship
     client_data = {
-        "userId": user_id,  # Use same user as client for simplicity
+        "userId": client_user_id,
         "taxProfessionalId": user_id,
         "taxYear": 2024,
         "estimatedCompletion": (datetime.now() + timedelta(days=30)).isoformat(),
