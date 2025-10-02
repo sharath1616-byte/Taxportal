@@ -105,15 +105,16 @@ const InviteClients = () => {
     }
   };
 
-  const resendInvitation = (inviteId) => {
-    setInvitations(prev => 
-      prev.map(inv => 
-        inv.id === inviteId 
-          ? { ...inv, status: 'pending', sentDate: new Date().toISOString().split('T')[0] }
-          : inv
-      )
-    );
-    alert('Invitation resent successfully!');
+  const resendInvitation = async (inviteId) => {
+    try {
+      setError(null);
+      await emailAPI.resendInvitation(inviteId);
+      setSuccessMessage('Invitation resent successfully!');
+      await loadInvitations(); // Reload to get updated data
+    } catch (err) {
+      setError('Failed to resend invitation. Please try again.');
+      console.error('Error resending invitation:', err);
+    }
   };
 
   const copyInviteLink = () => {
