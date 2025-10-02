@@ -75,6 +75,22 @@ function App() {
               } 
             />
             <Route 
+              path="/clients" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <ClientManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/employees" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <EmployeeManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/invite-clients" 
               element={
                 <ProtectedRoute roles={['tax_professional', 'admin']}>
