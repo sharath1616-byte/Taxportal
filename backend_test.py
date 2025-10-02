@@ -1160,6 +1160,504 @@ class TaxPortalAPITester:
             self.log_test("Stripe Webhook Endpoint", False, f"Exception: {str(e)}")
             return False
 
+    # BOOKKEEPING MANAGEMENT TESTS
+    def test_create_bookkeeping_service(self):
+        """Test creating a bookkeeping service"""
+        if "tax_professional" not in self.tokens or "client" not in self.users:
+            self.log_test("Create Bookkeeping Service", False, "Missing required tokens/users")
+            return False
+            
+        from datetime import date, timedelta
+        
+        service_data = {
+            "client_id": self.users["client"]["id"],
+            "service_type": "monthly_bookkeeping",
+            "frequency": "monthly",
+            "service_name": "Monthly Bookkeeping Service",
+            "description": "Complete monthly bookkeeping including reconciliation and reporting",
+            "monthly_fee": 500.00,
+            "hourly_rate": 75.00,
+            "estimated_hours": 8,
+            "start_date": date.today().isoformat(),
+            "auto_invoice": True,
+            "include_reports": True,
+            "client_access_level": "view_only",
+            "notes": "New client setup for monthly bookkeeping"
+        }
+        
+        try:
+            response = self.make_request("POST", "/bookkeeping/services", service_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "id" in data and data["service_name"] == service_data["service_name"]:
+                    self.bookkeeping_service_id = data["id"]
+                    self.log_test("Create Bookkeeping Service", True, 
+                                f"Service created with ID: {data['id']}")
+                    return True
+                else:
+                    self.log_test("Create Bookkeeping Service", False, f"Invalid service data: {data}")
+                    return False
+            else:
+                self.log_test("Create Bookkeeping Service", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Create Bookkeeping Service", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_bookkeeping_services(self):
+        """Test retrieving bookkeeping services"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get Bookkeeping Services", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/bookkeeping/services", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test("Get Bookkeeping Services", True, 
+                                f"Retrieved {len(data)} bookkeeping services")
+                    return True
+                else:
+                    self.log_test("Get Bookkeeping Services", False, 
+                                f"Expected list, got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Get Bookkeeping Services", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Bookkeeping Services", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_specific_bookkeeping_service(self):
+        """Test retrieving a specific bookkeeping service"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get Specific Bookkeeping Service", False, "No tax professional token available")
+            return False
+            
+        service_id = getattr(self, 'bookkeeping_service_id', None)
+        if not service_id:
+            self.log_test("Get Specific Bookkeeping Service", True, "No service ID available (test skipped)")
+            return True
+            
+        try:
+            response = self.make_request("GET", f"/bookkeeping/services/{service_id}",
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "id" in data and data["id"] == service_id:
+                    self.log_test("Get Specific Bookkeeping Service", True, 
+                                f"Retrieved service: {data['service_name']}")
+                    return True
+                else:
+                    self.log_test("Get Specific Bookkeeping Service", False, 
+                                f"Service ID mismatch or invalid data: {data}")
+                    return False
+            else:
+                self.log_test("Get Specific Bookkeeping Service", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Specific Bookkeeping Service", False, f"Exception: {str(e)}")
+            return False
+
+    def test_create_bookkeeping_task(self):
+        """Test creating a bookkeeping task"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Create Bookkeeping Task", False, "No tax professional token available")
+            return False
+            
+        service_id = getattr(self, 'bookkeeping_service_id', None)
+        if not service_id:
+            self.log_test("Create Bookkeeping Task", True, "No service ID available (test skipped)")
+            return True
+            
+        from datetime import date, timedelta
+        
+        task_data = {
+            "service_id": service_id,
+            "task_name": "Monthly Bank Reconciliation",
+            "description": "Reconcile all bank accounts for the month",
+            "task_type": "bank_reconciliation",
+            "priority": "high",
+            "estimated_hours": 3.0,
+            "due_date": (date.today() + timedelta(days=7)).isoformat(),
+            "notes": "Include all business accounts"
+        }
+        
+        try:
+            response = self.make_request("POST", "/bookkeeping/tasks", task_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "id" in data and data["task_name"] == task_data["task_name"]:
+                    self.bookkeeping_task_id = data["id"]
+                    self.log_test("Create Bookkeeping Task", True, 
+                                f"Task created with ID: {data['id']}")
+                    return True
+                else:
+                    self.log_test("Create Bookkeeping Task", False, f"Invalid task data: {data}")
+                    return False
+            else:
+                self.log_test("Create Bookkeeping Task", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Create Bookkeeping Task", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_bookkeeping_tasks(self):
+        """Test retrieving bookkeeping tasks"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get Bookkeeping Tasks", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/bookkeeping/tasks", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test("Get Bookkeeping Tasks", True, 
+                                f"Retrieved {len(data)} bookkeeping tasks")
+                    return True
+                else:
+                    self.log_test("Get Bookkeeping Tasks", False, 
+                                f"Expected list, got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Get Bookkeeping Tasks", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Bookkeeping Tasks", False, f"Exception: {str(e)}")
+            return False
+
+    def test_create_time_entry(self):
+        """Test creating a time entry"""
+        if "tax_professional" not in self.tokens or "client" not in self.users:
+            self.log_test("Create Time Entry", False, "Missing required tokens/users")
+            return False
+            
+        from datetime import date
+        
+        time_entry_data = {
+            "client_id": self.users["client"]["id"],
+            "date": date.today().isoformat(),
+            "hours": 2.5,
+            "description": "Bank reconciliation and expense categorization",
+            "notes": "Completed monthly reconciliation for checking account",
+            "billable": True,
+            "hourly_rate": 75.00
+        }
+        
+        # Add service_id if available
+        service_id = getattr(self, 'bookkeeping_service_id', None)
+        if service_id:
+            time_entry_data["service_id"] = service_id
+            
+        try:
+            response = self.make_request("POST", "/bookkeeping/time-entries", time_entry_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "id" in data and data["hours"] == time_entry_data["hours"]:
+                    self.time_entry_id = data["id"]
+                    self.log_test("Create Time Entry", True, 
+                                f"Time entry created with ID: {data['id']}")
+                    return True
+                else:
+                    self.log_test("Create Time Entry", False, f"Invalid time entry data: {data}")
+                    return False
+            else:
+                self.log_test("Create Time Entry", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Create Time Entry", False, f"Exception: {str(e)}")
+            return False
+
+    def test_get_time_entries(self):
+        """Test retrieving time entries"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Get Time Entries", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/bookkeeping/time-entries", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test("Get Time Entries", True, 
+                                f"Retrieved {len(data)} time entries")
+                    return True
+                else:
+                    self.log_test("Get Time Entries", False, 
+                                f"Expected list, got: {type(data)}")
+                    return False
+            else:
+                self.log_test("Get Time Entries", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Get Time Entries", False, f"Exception: {str(e)}")
+            return False
+
+    def test_bookkeeping_dashboard(self):
+        """Test bookkeeping dashboard analytics"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("Bookkeeping Dashboard", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/bookkeeping/dashboard", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                required_keys = ["service_stats", "task_stats", "recent_time_entries", "total_hours_this_month"]
+                missing_keys = [key for key in required_keys if key not in data]
+                
+                if not missing_keys:
+                    service_stats = data["service_stats"]
+                    task_stats = data["task_stats"]
+                    self.log_test("Bookkeeping Dashboard", True, 
+                                f"Dashboard data retrieved: {service_stats['total_services']} services, {task_stats['total_tasks']} tasks")
+                    return True
+                else:
+                    self.log_test("Bookkeeping Dashboard", False, 
+                                f"Missing required keys: {missing_keys}")
+                    return False
+            else:
+                self.log_test("Bookkeeping Dashboard", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Bookkeeping Dashboard", False, f"Exception: {str(e)}")
+            return False
+
+    def test_bookkeeping_role_based_access(self):
+        """Test role-based access control for bookkeeping endpoints"""
+        if "client" not in self.tokens:
+            self.log_test("Bookkeeping RBAC Test", False, "No client token available")
+            return False
+            
+        # Test: Client trying to create bookkeeping service (should fail)
+        service_data = {
+            "client_id": self.users["client"]["id"],
+            "service_type": "monthly_bookkeeping",
+            "frequency": "monthly",
+            "service_name": "Test Service",
+            "start_date": "2024-01-01"
+        }
+        
+        try:
+            response = self.make_request("POST", "/bookkeeping/services", service_data,
+                                       token=self.tokens["client"])
+            if response.status_code == 403:
+                self.log_test("Bookkeeping RBAC Test", True, 
+                            "Client correctly denied access to create bookkeeping service")
+                return True
+            else:
+                self.log_test("Bookkeeping RBAC Test", False, 
+                            f"Expected 403, got {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_test("Bookkeeping RBAC Test", False, f"Exception: {str(e)}")
+            return False
+
+    # SECURITY (2FA + reCAPTCHA) TESTS
+    def test_2fa_setup(self):
+        """Test 2FA setup with TOTP generation"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("2FA Setup", False, "No tax professional token available")
+            return False
+            
+        setup_data = {
+            "app_name": "TaxPortal Pro Test"
+        }
+        
+        try:
+            response = self.make_request("POST", "/security/2fa/setup", setup_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                required_keys = ["secret", "qr_code", "provisioning_uri", "backup_codes"]
+                missing_keys = [key for key in required_keys if key not in data]
+                
+                if not missing_keys:
+                    # Store secret for verification test
+                    self.totp_secret = data["secret"]
+                    self.log_test("2FA Setup", True, 
+                                f"2FA setup successful with secret and QR code generated")
+                    return True
+                else:
+                    self.log_test("2FA Setup", False, f"Missing required keys: {missing_keys}")
+                    return False
+            else:
+                self.log_test("2FA Setup", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("2FA Setup", False, f"Exception: {str(e)}")
+            return False
+
+    def test_2fa_verify_and_enable(self):
+        """Test 2FA verification and enabling"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("2FA Verify and Enable", False, "No tax professional token available")
+            return False
+            
+        totp_secret = getattr(self, 'totp_secret', None)
+        if not totp_secret:
+            self.log_test("2FA Verify and Enable", True, "No TOTP secret available (test skipped)")
+            return True
+            
+        try:
+            import pyotp
+            totp = pyotp.TOTP(totp_secret)
+            current_token = totp.now()
+            
+            verify_data = {
+                "token": current_token
+            }
+            
+            response = self.make_request("POST", "/security/2fa/verify", verify_data,
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "message" in data and "enabled successfully" in data["message"]:
+                    self.log_test("2FA Verify and Enable", True, 
+                                f"2FA verification successful: {data['message']}")
+                    return True
+                else:
+                    self.log_test("2FA Verify and Enable", False, f"Unexpected response: {data}")
+                    return False
+            else:
+                self.log_test("2FA Verify and Enable", False, 
+                            f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("2FA Verify and Enable", False, f"Exception: {str(e)}")
+            return False
+
+    def test_2fa_status_check(self):
+        """Test checking 2FA status"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("2FA Status Check", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("GET", "/security/2fa/status", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "enabled" in data:
+                    self.log_test("2FA Status Check", True, 
+                                f"2FA status retrieved: enabled={data['enabled']}")
+                    return True
+                else:
+                    self.log_test("2FA Status Check", False, f"Missing 'enabled' key: {data}")
+                    return False
+            else:
+                self.log_test("2FA Status Check", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("2FA Status Check", False, f"Exception: {str(e)}")
+            return False
+
+    def test_2fa_disable(self):
+        """Test disabling 2FA"""
+        if "tax_professional" not in self.tokens:
+            self.log_test("2FA Disable", False, "No tax professional token available")
+            return False
+            
+        try:
+            response = self.make_request("POST", "/security/2fa/disable", 
+                                       token=self.tokens["tax_professional"])
+            if response.status_code == 200:
+                data = response.json()
+                if "message" in data and "disabled" in data["message"]:
+                    self.log_test("2FA Disable", True, f"2FA disabled: {data['message']}")
+                    return True
+                else:
+                    self.log_test("2FA Disable", False, f"Unexpected response: {data}")
+                    return False
+            else:
+                self.log_test("2FA Disable", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("2FA Disable", False, f"Exception: {str(e)}")
+            return False
+
+    def test_recaptcha_verify_endpoint(self):
+        """Test reCAPTCHA verification endpoint"""
+        # This test checks the endpoint structure, not actual reCAPTCHA verification
+        recaptcha_data = {
+            "token": "test_token_for_structure_check",
+            "action": "login"
+        }
+        
+        try:
+            response = self.make_request("POST", "/security/recaptcha/verify", recaptcha_data)
+            if response.status_code == 503:
+                if "not configured" in response.text:
+                    self.log_test("reCAPTCHA Verify Endpoint", True, 
+                                "reCAPTCHA endpoint correctly reports not configured")
+                    return True
+                else:
+                    self.log_test("reCAPTCHA Verify Endpoint", False, 
+                                f"Unexpected error message: {response.text}")
+                    return False
+            elif response.status_code == 200:
+                # If configured, check response structure
+                data = response.json()
+                required_keys = ["success", "score", "action"]
+                if all(key in data for key in required_keys):
+                    self.log_test("reCAPTCHA Verify Endpoint", True, 
+                                "reCAPTCHA endpoint working with proper response structure")
+                    return True
+                else:
+                    self.log_test("reCAPTCHA Verify Endpoint", False, 
+                                f"Missing required keys in response: {data}")
+                    return False
+            else:
+                self.log_test("reCAPTCHA Verify Endpoint", False, 
+                            f"Unexpected status code: {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_test("reCAPTCHA Verify Endpoint", False, f"Exception: {str(e)}")
+            return False
+
+    def test_security_authentication_required(self):
+        """Test that security endpoints require authentication"""
+        test_cases = [
+            ("/security/2fa/setup", "POST"),
+            ("/security/2fa/verify", "POST"),
+            ("/security/2fa/status", "GET"),
+            ("/security/2fa/disable", "POST")
+        ]
+        
+        success_count = 0
+        for endpoint, method in test_cases:
+            try:
+                test_data = {"app_name": "Test"} if "setup" in endpoint else {"token": "test"}
+                response = self.make_request(method, endpoint, test_data)  # No token
+                if response.status_code in [401, 403]:
+                    self.log_test(f"Security Auth Required - {endpoint}", True, 
+                                f"Correctly requires authentication (HTTP {response.status_code})")
+                    success_count += 1
+                else:
+                    self.log_test(f"Security Auth Required - {endpoint}", False, 
+                                f"Expected 401/403, got {response.status_code}")
+            except Exception as e:
+                self.log_test(f"Security Auth Required - {endpoint}", False, f"Exception: {str(e)}")
+                
+        return success_count == len(test_cases)
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting TaxPortal Pro API Backend Tests")
