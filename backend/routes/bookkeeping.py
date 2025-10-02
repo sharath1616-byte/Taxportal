@@ -11,7 +11,7 @@ from models.bookkeeping import (
 from utils.auth import get_current_user, require_role
 from database import get_database
 
-router = APIRouter(prefix="/api/bookkeeping", tags=["bookkeeping"])
+router = APIRouter(prefix="/bookkeeping", tags=["bookkeeping"])
 
 @router.post("/services", response_model=BookkeepingService)
 async def create_bookkeeping_service(
