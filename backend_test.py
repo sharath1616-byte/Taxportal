@@ -14,7 +14,7 @@ from typing import Dict, Any, Optional
 import uuid
 
 # Configuration
-BASE_URL = "https://acctax-portal.preview.emergentagent.com/api"
+BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
 HEADERS = {"Content-Type": "application/json"}
 
 class TaxPortalAPITester:

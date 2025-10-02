@@ -8,7 +8,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-BASE_URL = "https://acctax-portal.preview.emergentagent.com/api"
+BASE_URL = "https://accountease-3.preview.emergentagent.com/api"
 
 def test_additional_scenarios():
     """Test additional scenarios and edge cases"""
