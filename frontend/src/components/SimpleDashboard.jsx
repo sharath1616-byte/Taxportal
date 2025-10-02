@@ -186,30 +186,62 @@ const SimpleDashboard = () => {
               <CardContent className="space-y-3">
                 {user.role === 'client' ? (
                   <>
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/documents')}
+                    >
                       <FileText className="w-4 h-4 mr-2" />
                       Upload Document
                     </Button>
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/messages')}
+                    >
                       <MessageSquare className="w-4 h-4 mr-2" />
                       Send Message
                     </Button>
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/invoices')}
+                    >
                       <Receipt className="w-4 h-4 mr-2" />
                       View Invoices
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button className="w-full justify-start" variant="outline">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Client
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/invite-clients')}
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Invite Clients
                     </Button>
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/email-integration')}
+                    >
+                      <Mail className="w-4 h-4 mr-2" />
+                      Email Integration
+                    </Button>
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/invoices')}
+                    >
                       <Receipt className="w-4 h-4 mr-2" />
                       Create Invoice
                     </Button>
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button 
+                      className="w-full justify-start" 
+                      variant="outline"
+                      onClick={() => navigate('/messages')}
+                    >
                       <MessageSquare className="w-4 h-4 mr-2" />
                       Send Message
                     </Button>
