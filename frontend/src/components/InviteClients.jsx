@@ -23,38 +23,17 @@ import {
 const InviteClients = () => {
   const { user } = useAuth();
   const [inviteForm, setInviteForm] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-    message: 'I\'d like to invite you to use our secure client portal for managing your tax documents and communications.'
+    client_email: '',
+    client_first_name: '',
+    client_last_name: '',
+    personal_message: 'I\'d like to invite you to use our secure client portal for managing your tax documents and communications.',
+    provider: 'sendgrid'
   });
-  const [invitations, setInvitations] = useState([
-    {
-      id: 1,
-      email: 'john.doe@example.com',
-      name: 'John Doe',
-      status: 'pending',
-      sentDate: '2024-01-15',
-      expiresDate: '2024-02-15'
-    },
-    {
-      id: 2,
-      email: 'sarah.johnson@example.com', 
-      name: 'Sarah Johnson',
-      status: 'accepted',
-      sentDate: '2024-01-10',
-      acceptedDate: '2024-01-12'
-    },
-    {
-      id: 3,
-      email: 'mike.wilson@example.com',
-      name: 'Mike Wilson', 
-      status: 'expired',
-      sentDate: '2024-12-15',
-      expiresDate: '2024-01-15'
-    }
-  ]);
+  const [invitations, setInvitations] = useState([]);
   const [isInviting, setIsInviting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleInviteSubmit = async (e) => {
     e.preventDefault();
