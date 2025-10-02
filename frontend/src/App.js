@@ -142,6 +142,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/compliance-calendar" 
+              element={
+                <ProtectedRoute roles={['client']}>
+                  <ClientComplianceCalendar />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Redirect unknown routes to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
