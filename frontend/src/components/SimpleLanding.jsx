@@ -5,6 +5,44 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Shield, FileText, MessageSquare, Receipt, Users, Zap } from 'lucide-react';
 import SimpleNavbar from './SimpleNavbar';
 
+const LandingNavbar = () => {
+  return (
+    <nav className="bg-white shadow-sm border-b">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center space-x-8">
+            <Link to="/" className="text-2xl font-bold text-blue-600">
+              TaxPortal
+            </Link>
+            
+            <div className="hidden md:flex items-center space-x-1">
+              <Link to="/pricing">
+                <Button variant="ghost" size="sm">
+                  Pricing
+                </Button>
+              </Link>
+              <Link to="/about">
+                <Button variant="ghost" size="sm">
+                  About Us
+                </Button>
+              </Link>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <Link to="/login">
+              <Button variant="ghost">Login</Button>
+            </Link>
+            <Link to="/register">
+              <Button>Get Started</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
 const SimpleLanding = () => {
   const features = [
     {
