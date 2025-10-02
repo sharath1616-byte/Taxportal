@@ -362,7 +362,7 @@ class InvoicePaymentFlowTester:
         
         test_steps = [
             self.test_step1_tax_professional_creates_invoice,
-            self.test_step2_verify_invoice_status_unpaid,
+            self.test_step2_verify_invoice_status_draft,
             self.test_step3_tax_professional_creates_payment_checkout,
             self.test_step4_client_can_access_payment_checkout,
             self.test_step5_verify_stripe_checkout_url,
