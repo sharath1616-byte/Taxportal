@@ -17,6 +17,12 @@ import PaymentIntegration from "./components/PaymentIntegration";
 import PricingPage from "./components/PricingPage";
 import AboutUsPage from "./components/AboutUsPage";
 
+// Enhanced Components
+import ClientManagement from "./components/ClientManagement";
+import EmployeeManagement from "./components/EmployeeManagement";
+import EnhancedPricingPage from "./components/EnhancedPricingPage";
+import EnhancedInvoices from "./components/EnhancedInvoices";
+
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
 import RegisterForm from "./components/auth/RegisterForm";
