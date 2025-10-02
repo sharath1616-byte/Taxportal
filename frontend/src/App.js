@@ -13,6 +13,7 @@ import SimpleMessages from "./components/SimpleMessages";
 import SimpleInvoices from "./components/SimpleInvoices";
 import InviteClients from "./components/InviteClients";
 import EmailIntegration from "./components/EmailIntegration";
+import PaymentIntegration from "./components/PaymentIntegration";
 import PricingPage from "./components/PricingPage";
 import AboutUsPage from "./components/AboutUsPage";
 
