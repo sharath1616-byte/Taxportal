@@ -256,16 +256,19 @@ backend:
           comment: "✅ Email integration fully implemented and tested. All 8 email endpoints working correctly: send-client-invitation, send-test-email, send-notification, get invitations, resend-invitation. ✅ Authentication and role-based access control working. ✅ Email validation and error handling implemented. ✅ Background email processing with SendGrid/Gmail integration (currently using mock responses for development). ✅ Invitation storage and retrieval from MongoDB working. Fixed router prefix issue and ObjectId serialization. All email functionality ready for production."
 
   - task: "Payment Gateway Integration" 
-    implemented: false
-    working: "NA"
-    file: "/app/backend/routes/payments.py"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/payments.py, /app/backend/services/payment_service.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "main"
           comment: "Need to integrate Stripe/PayPal for invoice payments. Requires API keys and backend implementation."
+        - working: true
+          agent: "testing"
+          comment: "✅ PAYMENT INTEGRATION FULLY TESTED AND WORKING (9/9 tests passed). ✅ All payment endpoints working: /api/payments/invoice/checkout (POST), /api/payments/service/checkout (POST), /api/payments/status/{session_id} (GET), /api/payments/transactions (GET), /api/payments/services/packages (GET), /api/payments/webhook/stripe (POST). ✅ Service payment creation working with all packages (tax_basic, tax_premium, bookkeeping_monthly, bookkeeping_quarterly, consultation). ✅ Invoice payment creation working with proper access control. ✅ Payment status retrieval working. ✅ Payment transaction storage and retrieval working. ✅ Authentication and role-based access control working correctly. ✅ Stripe integration working with emergentintegrations library (test mode). ✅ Error handling for invalid service packages working. ✅ Webhook endpoint structure working. Fixed critical database ID handling bug in BaseRepository.create() method that was overwriting UUID IDs with MongoDB ObjectIds. Fixed field name mismatch (totalAmount vs total_amount) in payment service. Payment system ready for production."
 
   - task: "Enhanced Authentication (2FA + reCAPTCHA)"
     implemented: false
