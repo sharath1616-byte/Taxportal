@@ -157,18 +157,20 @@ const InviteClients = () => {
                       <label className="block text-sm font-medium mb-2">First Name</label>
                       <Input
                         required
-                        value={inviteForm.firstName}
-                        onChange={(e) => setInviteForm(prev => ({ ...prev, firstName: e.target.value }))}
+                        value={inviteForm.client_first_name}
+                        onChange={(e) => setInviteForm(prev => ({ ...prev, client_first_name: e.target.value }))}
                         placeholder="John"
+                        disabled={isInviting}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Last Name</label>
                       <Input
                         required
-                        value={inviteForm.lastName}
-                        onChange={(e) => setInviteForm(prev => ({ ...prev, lastName: e.target.value }))}
+                        value={inviteForm.client_last_name}
+                        onChange={(e) => setInviteForm(prev => ({ ...prev, client_last_name: e.target.value }))}
                         placeholder="Doe"
+                        disabled={isInviting}
                       />
                     </div>
                   </div>
@@ -178,19 +180,38 @@ const InviteClients = () => {
                     <Input
                       type="email"
                       required
-                      value={inviteForm.email}
-                      onChange={(e) => setInviteForm(prev => ({ ...prev, email: e.target.value }))}
+                      value={inviteForm.client_email}
+                      onChange={(e) => setInviteForm(prev => ({ ...prev, client_email: e.target.value }))}
                       placeholder="john.doe@example.com"
+                      disabled={isInviting}
                     />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email Provider</label>
+                    <Select
+                      value={inviteForm.provider}
+                      onValueChange={(value) => setInviteForm(prev => ({ ...prev, provider: value }))}
+                      disabled={isInviting}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select email provider" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sendgrid">SendGrid (Reliable)</SelectItem>
+                        <SelectItem value="gmail">Gmail (Development)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium mb-2">Personal Message</label>
                     <Textarea
-                      value={inviteForm.message}
-                      onChange={(e) => setInviteForm(prev => ({ ...prev, message: e.target.value }))}
+                      value={inviteForm.personal_message}
+                      onChange={(e) => setInviteForm(prev => ({ ...prev, personal_message: e.target.value }))}
                       placeholder="Add a personal message to your invitation..."
                       className="min-h-[100px]"
+                      disabled={isInviting}
                     />
                   </div>
                   
