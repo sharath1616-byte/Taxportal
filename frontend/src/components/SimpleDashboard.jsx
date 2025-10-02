@@ -21,6 +21,7 @@ import {
 
 const SimpleDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     clients: 0,
     documents: 0,
