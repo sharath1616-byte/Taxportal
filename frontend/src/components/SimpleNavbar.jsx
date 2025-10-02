@@ -121,6 +121,14 @@ const SimpleNavbar = () => {
                       Email Sync
                     </Button>
                   </Link>
+                  <Link to="/compliance">
+                    <Button 
+                      variant={isActive('/compliance') ? 'default' : 'ghost'}
+                      size="sm"
+                    >
+                      Compliance
+                    </Button>
+                  </Link>
                 </>
               )}
             </div>
