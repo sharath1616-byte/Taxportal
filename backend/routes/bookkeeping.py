@@ -8,7 +8,7 @@ from models.bookkeeping import (
     BookkeepingServiceCreate, BookkeepingTaskCreate, TimeEntryCreate, BookkeepingServiceUpdate,
     BookkeepingServiceType, BookkeepingStatus, BookkeepingFrequency
 )
-from utils.auth import get_current_user, require_roles
+from utils.auth import get_current_user, require_role
 from database import get_database
 
 router = APIRouter(prefix="/api/bookkeeping", tags=["bookkeeping"])
