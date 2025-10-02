@@ -84,6 +84,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/payments" 
+              element={
+                <ProtectedRoute>
+                  <PaymentIntegration />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Redirect unknown routes to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
