@@ -29,6 +29,8 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<SimpleLanding />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/about" element={<AboutUsPage />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegisterForm />} />
             
@@ -62,6 +64,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SimpleInvoices />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/invite-clients" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <InviteClients />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/email-integration" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <EmailIntegration />
                 </ProtectedRoute>
               } 
             />
