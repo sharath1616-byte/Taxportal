@@ -11,6 +11,10 @@ import SimpleDashboard from "./components/SimpleDashboard";
 import SimpleDocuments from "./components/SimpleDocuments";
 import SimpleMessages from "./components/SimpleMessages";
 import SimpleInvoices from "./components/SimpleInvoices";
+import InviteClients from "./components/InviteClients";
+import EmailIntegration from "./components/EmailIntegration";
+import PricingPage from "./components/PricingPage";
+import AboutUsPage from "./components/AboutUsPage";
 
 // Auth Components
 import LoginForm from "./components/auth/LoginForm";
