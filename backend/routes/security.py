@@ -11,7 +11,7 @@ import uuid
 from utils.auth import get_current_user, require_role
 from database import get_database
 
-router = APIRouter(prefix="/api/security", tags=["security"])
+router = APIRouter(prefix="/security", tags=["security"])
 
 class TotpSetupRequest(BaseModel):
     app_name: str = "TaxPortal Pro"
