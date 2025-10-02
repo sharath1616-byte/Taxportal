@@ -8,7 +8,7 @@ import base64
 from datetime import datetime
 import uuid
 
-from utils.auth import get_current_user, require_roles
+from utils.auth import get_current_user, require_role
 from database import get_database
 
 router = APIRouter(prefix="/api/security", tags=["security"])
