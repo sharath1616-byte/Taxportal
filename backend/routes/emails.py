@@ -185,7 +185,7 @@ async def resend_invitation(
         db = await get_database()
         invitation = await db.client_invitations.find_one({
             "id": invitation_id,
-            "professional_id": current_user["id"]
+            "professional_id": current_user["user_id"]
         })
         
         if not invitation:
