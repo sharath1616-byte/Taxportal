@@ -256,47 +256,120 @@ const ClientManagement = () => {
     </div>
   );
 
-  const ClientDocuments = ({ client }) => (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Client Documents</h3>
-        <Button size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          Upload Document
-        </Button>
-      </div>
+  const ClientDocuments = ({ client }) => {
+    const [showUploadModal, setShowUploadModal] = useState(false);
+    const [uploadFile, setUploadFile] = useState(null);
+    const [uploadCategory, setUploadCategory] = useState('tax_documents');
+    
+    const handleFileUpload = async (e) => {
+      e.preventDefault();
+      if (!uploadFile) return;
       
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-3">
-            {[
-              { name: 'Tax_Form_2024.pdf', size: '2.4 MB', date: '2024-02-01', type: 'Tax Documents' },
-              { name: 'Receipt_Jan2024.jpg', size: '1.8 MB', date: '2024-01-28', type: 'Receipts' },
-              { name: 'Bank_Statement.pdf', size: '3.2 MB', date: '2024-01-25', type: 'Financial' }
-            ].map((doc, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <FileText className="w-5 h-5 text-blue-500" />
-                  <div>
-                    <p className="font-medium text-sm">{doc.name}</p>
-                    <p className="text-xs text-gray-500">{doc.type} • {doc.size} • {doc.date}</p>
+      // Mock file upload - replace with real implementation
+      const newDoc = {
+        name: uploadFile.name,
+        size: (uploadFile.size / 1024 / 1024).toFixed(1) + ' MB',
+        date: new Date().toISOString().split('T')[0],
+        type: uploadCategory.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+      };
+      
+      console.log('Uploading document:', newDoc);
+      setShowUploadModal(false);
+      setUploadFile(null);
+      alert('Document uploaded successfully!');
+    };
+    
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">Client Documents</h3>
+          <Button size="sm" onClick={() => setShowUploadModal(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Upload Document
+          </Button>
+        </div>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <div className="space-y-3">
+              {[
+                { name: 'Tax_Form_2024.pdf', size: '2.4 MB', date: '2024-02-01', type: 'Tax Documents' },
+                { name: 'Receipt_Jan2024.jpg', size: '1.8 MB', date: '2024-01-28', type: 'Receipts' },
+                { name: 'Bank_Statement.pdf', size: '3.2 MB', date: '2024-01-25', type: 'Financial' }
+              ].map((doc, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="w-5 h-5 text-blue-500" />
+                    <div>
+                      <p className="font-medium text-sm">{doc.name}</p>
+                      <p className="text-xs text-gray-500">{doc.type} • {doc.size} • {doc.date}</p>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button variant="ghost" size="sm" onClick={() => alert('Document viewer would open here')}>
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => alert('Download started')}>
+                      <MoreVertical className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="ghost" size="sm">
-                    <Eye className="w-4 h-4" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Upload Modal */}
+        {showUploadModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-md m-4">
+              <CardHeader>
+                <CardTitle>Upload Document</CardTitle>
+                <CardDescription>Upload a document for {client.firstName} {client.lastName}</CardDescription>
+              </CardHeader>
+              <form onSubmit={handleFileUpload}>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Select File</label>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+                      onChange={(e) => setUploadFile(e.target.files[0])}
+                      className="w-full"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Category</label>
+                    <select
+                      value={uploadCategory}
+                      onChange={(e) => setUploadCategory(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    >
+                      <option value="tax_documents">Tax Documents</option>
+                      <option value="receipts">Receipts</option>
+                      <option value="financial">Financial Statements</option>
+                      <option value="legal">Legal Documents</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </CardContent>
+                <div className="flex justify-end space-x-2 p-6 pt-0">
+                  <Button type="button" variant="outline" onClick={() => setShowUploadModal(false)}>
+                    Cancel
                   </Button>
-                  <Button variant="ghost" size="sm">
-                    <MoreVertical className="w-4 h-4" />
+                  <Button type="submit">
+                    Upload Document
                   </Button>
                 </div>
-              </div>
-            ))}
+              </form>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
   const ClientInvoices = ({ client }) => (
     <div className="space-y-4">
