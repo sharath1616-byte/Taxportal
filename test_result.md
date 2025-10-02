@@ -499,8 +499,10 @@ frontend:
 metadata:
   created_by: "testing_agent"
   version: "1.0"
-  test_sequence: 1
+  test_sequence: 2
   run_ui: false
+  comprehensive_backend_testing_completed: true
+  total_backend_tests_passed: "32/32"
 
 test_plan:
   current_focus:
