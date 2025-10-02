@@ -498,59 +498,132 @@ const ClientManagement = () => {
     );
   };
 
-  const ClientMessages = ({ client }) => (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Messages & Communications</h3>
-        <Button size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          New Message
-        </Button>
-      </div>
+  const ClientMessages = ({ client }) => {
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [newMessage, setNewMessage] = useState({
+      subject: '',
+      message: ''
+    });
+    
+    const handleSendMessage = async (e) => {
+      e.preventDefault();
       
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-4">
-            {[
-              { 
-                subject: 'Tax document clarification needed', 
-                preview: 'Hi, I have a question about the tax document you requested...', 
-                date: '2024-02-01', 
-                unread: true 
-              },
-              { 
-                subject: 'Invoice payment confirmation', 
-                preview: 'Thank you for the invoice. The payment has been processed...', 
-                date: '2024-01-28', 
-                unread: false 
-              },
-              { 
-                subject: 'Meeting reschedule request', 
-                preview: 'I need to reschedule our meeting for next week...', 
-                date: '2024-01-25', 
-                unread: false 
-              }
-            ].map((message, idx) => (
-              <div key={idx} className={`p-4 border rounded-lg cursor-pointer hover:bg-gray-50 ${message.unread ? 'bg-blue-50 border-blue-200' : ''}`}>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h4 className={`font-medium text-sm ${message.unread ? 'font-semibold' : ''}`}>
-                      {message.subject}
-                    </h4>
-                    <p className="text-sm text-gray-600 mt-1">{message.preview}</p>
-                    <p className="text-xs text-gray-500 mt-2">{message.date}</p>
+      // Mock message sending - replace with real implementation
+      const messageData = {
+        subject: newMessage.subject,
+        message: newMessage.message,
+        date: new Date().toISOString().split('T')[0],
+        clientId: client.id
+      };
+      
+      console.log('Sending message to client:', client.id, messageData);
+      alert('Message sent successfully!');
+      setShowMessageModal(false);
+      setNewMessage({ subject: '', message: '' });
+    };
+    
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">Messages & Communications</h3>
+          <Button size="sm" onClick={() => setShowMessageModal(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            New Message
+          </Button>
+        </div>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              {[
+                { 
+                  subject: 'Tax document clarification needed', 
+                  preview: 'Hi, I have a question about the tax document you requested...', 
+                  date: '2024-02-01', 
+                  unread: true 
+                },
+                { 
+                  subject: 'Invoice payment confirmation', 
+                  preview: 'Thank you for the invoice. The payment has been processed...', 
+                  date: '2024-01-28', 
+                  unread: false 
+                },
+                { 
+                  subject: 'Meeting reschedule request', 
+                  preview: 'I need to reschedule our meeting for next week...', 
+                  date: '2024-01-25', 
+                  unread: false 
+                }
+              ].map((message, idx) => (
+                <div 
+                  key={idx} 
+                  className={`p-4 border rounded-lg cursor-pointer hover:bg-gray-50 ${message.unread ? 'bg-blue-50 border-blue-200' : ''}`}
+                  onClick={() => alert('Message thread would open here')}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h4 className={`font-medium text-sm ${message.unread ? 'font-semibold' : ''}`}>
+                        {message.subject}
+                      </h4>
+                      <p className="text-sm text-gray-600 mt-1">{message.preview}</p>
+                      <p className="text-xs text-gray-500 mt-2">{message.date}</p>
+                    </div>
+                    {message.unread && (
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    )}
                   </div>
-                  {message.unread && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* New Message Modal */}
+        {showMessageModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-lg m-4">
+              <CardHeader>
+                <CardTitle>Send Message</CardTitle>
+                <CardDescription>Send a message to {client.firstName} {client.lastName}</CardDescription>
+              </CardHeader>
+              <form onSubmit={handleSendMessage}>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Subject</label>
+                    <Input
+                      placeholder="Enter message subject"
+                      value={newMessage.subject}
+                      onChange={(e) => setNewMessage({...newMessage, subject: e.target.value})}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Message</label>
+                    <Textarea
+                      placeholder="Type your message here..."
+                      value={newMessage.message}
+                      onChange={(e) => setNewMessage({...newMessage, message: e.target.value})}
+                      rows={5}
+                      required
+                    />
+                  </div>
+                </CardContent>
+                <div className="flex justify-end space-x-2 p-6 pt-0">
+                  <Button type="button" variant="outline" onClick={() => setShowMessageModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    Send Message
+                  </Button>
+                </div>
+              </form>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
   if (isLoading) {
     return (
