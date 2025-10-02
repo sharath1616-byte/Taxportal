@@ -371,45 +371,132 @@ const ClientManagement = () => {
     );
   };
 
-  const ClientInvoices = ({ client }) => (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Client Invoices</h3>
-        <Button size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Invoice
-        </Button>
-      </div>
+  const ClientInvoices = ({ client }) => {
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [newInvoice, setNewInvoice] = useState({
+      description: '',
+      amount: '',
+      dueDate: ''
+    });
+    
+    const handleCreateInvoice = async (e) => {
+      e.preventDefault();
       
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-3">
-            {[
-              { number: 'INV-2024-003', amount: 450.00, status: 'paid', date: '2024-02-01' },
-              { number: 'INV-2024-002', amount: 275.00, status: 'sent', date: '2024-01-15' },
-              { number: 'INV-2024-001', amount: 350.00, status: 'paid', date: '2024-01-01' }
-            ].map((invoice, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <Receipt className="w-5 h-5 text-green-500" />
-                  <div>
-                    <p className="font-medium text-sm">{invoice.number}</p>
-                    <p className="text-xs text-gray-500">{invoice.date}</p>
+      // Mock invoice creation - replace with real implementation
+      const invoiceData = {
+        number: `INV-${Date.now()}`,
+        amount: parseFloat(newInvoice.amount),
+        status: 'draft',
+        date: new Date().toISOString().split('T')[0],
+        description: newInvoice.description,
+        dueDate: newInvoice.dueDate
+      };
+      
+      console.log('Creating invoice for client:', client.id, invoiceData);
+      alert('Invoice created successfully!');
+      setShowCreateModal(false);
+      setNewInvoice({ description: '', amount: '', dueDate: '' });
+    };
+    
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">Client Invoices</h3>
+          <Button size="sm" onClick={() => setShowCreateModal(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Create Invoice
+          </Button>
+        </div>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <div className="space-y-3">
+              {[
+                { number: 'INV-2024-003', amount: 450.00, status: 'paid', date: '2024-02-01' },
+                { number: 'INV-2024-002', amount: 275.00, status: 'sent', date: '2024-01-15' },
+                { number: 'INV-2024-001', amount: 350.00, status: 'paid', date: '2024-01-01' }
+              ].map((invoice, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <Receipt className="w-5 h-5 text-green-500" />
+                    <div>
+                      <p className="font-medium text-sm">{invoice.number}</p>
+                      <p className="text-xs text-gray-500">{invoice.date}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span className="font-medium">${invoice.amount.toFixed(2)}</span>
+                    <Badge className={getStatusColor(invoice.status)}>
+                      {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                    </Badge>
+                    <Button variant="outline" size="sm" onClick={() => alert('Invoice details would open here')}>
+                      <Eye className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <span className="font-medium">${invoice.amount.toFixed(2)}</span>
-                  <Badge className={getStatusColor(invoice.status)}>
-                    {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
-                  </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Create Invoice Modal */}
+        {showCreateModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-md m-4">
+              <CardHeader>
+                <CardTitle>Create Invoice</CardTitle>
+                <CardDescription>Create a new invoice for {client.firstName} {client.lastName}</CardDescription>
+              </CardHeader>
+              <form onSubmit={handleCreateInvoice}>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Description</label>
+                    <Input
+                      placeholder="Tax preparation services"
+                      value={newInvoice.description}
+                      onChange={(e) => setNewInvoice({...newInvoice, description: e.target.value})}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Amount ($)</label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0.00"
+                      value={newInvoice.amount}
+                      onChange={(e) => setNewInvoice({...newInvoice, amount: e.target.value})}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Due Date</label>
+                    <Input
+                      type="date"
+                      value={newInvoice.dueDate}
+                      onChange={(e) => setNewInvoice({...newInvoice, dueDate: e.target.value})}
+                      required
+                    />
+                  </div>
+                </CardContent>
+                <div className="flex justify-end space-x-2 p-6 pt-0">
+                  <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    Create Invoice
+                  </Button>
                 </div>
-              </div>
-            ))}
+              </form>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
   const ClientMessages = ({ client }) => (
     <div className="space-y-4">
