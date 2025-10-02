@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { clientAPI, taskAPI, messageAPI, invoiceAPI } from '../services/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -13,7 +14,9 @@ import {
   Plus,
   Clock,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Mail,
+  UserPlus
 } from 'lucide-react';
 
 const SimpleDashboard = () => {
