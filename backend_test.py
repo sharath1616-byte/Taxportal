@@ -432,6 +432,8 @@ class TaxPortalAPITester:
             if response.status_code == 200:
                 data = response.json()
                 if "id" in data and "invoiceNumber" in data:
+                    # Store invoice ID for payment testing
+                    self.test_invoice_id = data["id"]
                     self.log_test("Create Invoice", True, 
                                 f"Invoice created: {data['invoiceNumber']} (ID: {data['id']})")
                     return True
