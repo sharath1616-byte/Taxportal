@@ -116,6 +116,22 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/subscription" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <PlatformSubscription />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/client-services" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <ClientServicesManagement />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Redirect unknown routes to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
