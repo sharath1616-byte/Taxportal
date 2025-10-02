@@ -123,17 +123,71 @@ const PaymentIntegration = () => {
     );
   }
 
+  // Show different components based on active tab and user role
+  if (user?.role === 'tax_professional' && activeTab === 'platform') {
+    return <PlatformSubscription />;
+  }
+  
+  if (user?.role === 'tax_professional' && activeTab === 'services') {
+    return <ClientServicesManagement />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <SimpleNavbar />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+        {/* Header with Tab Navigation for Tax Professionals */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment & Services</h1>
-          <p className="text-gray-600">
-            Purchase tax and bookkeeping services securely through our integrated payment system.
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {user?.role === 'tax_professional' ? 'Payments & Services' : 'Available Services'}
+          </h1>
+          <p className="text-gray-600 mb-6">
+            {user?.role === 'tax_professional' 
+              ? 'Manage your platform subscription and client services'
+              : 'Purchase tax and bookkeeping services securely through our integrated payment system.'
+            }
           </p>
+          
+          {user?.role === 'tax_professional' && (
+            <div className="border-b border-gray-200">
+              <nav className="-mb-px flex space-x-8">
+                <button
+                  onClick={() => setActiveTab('platform')}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'platform'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Building className="w-4 h-4 inline mr-2" />
+                  Platform Subscription
+                </button>
+                <button
+                  onClick={() => setActiveTab('services')}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'services'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Package className="w-4 h-4 inline mr-2" />
+                  Client Services
+                </button>
+                <button
+                  onClick={() => setActiveTab('client_services')}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'client_services'
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  <Users className="w-4 h-4 inline mr-2" />
+                  Client View
+                </button>
+              </nav>
+            </div>
+          )}
         </div>
 
         {error && (
