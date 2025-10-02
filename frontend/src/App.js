@@ -151,6 +151,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/bookkeeping" 
+              element={
+                <ProtectedRoute roles={['tax_professional', 'admin']}>
+                  <BookkeepingManagement />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Redirect unknown routes to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
