@@ -34,6 +34,8 @@ const ClientManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [showAddClient, setShowAddClient] = useState(false);
+  const [showEditClient, setShowEditClient] = useState(false);
+  const [editingClient, setEditingClient] = useState(null);
   const [newClientForm, setNewClientForm] = useState({
     firstName: '',
     lastName: '',
